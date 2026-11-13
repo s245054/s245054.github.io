@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>北九州モノレールの席えらび</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DotGothic16&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap');
+:root{--ink:#4a5148;--cream:#fff9e9;--paper:#fffdf5;--green:#809b78;--orange:#ecaa70;--line:#e6dcc1;--pink:#e8a8a0}
+*{box-sizing:border-box}body{margin:0;background:#f5ecd9;color:var(--ink);font-family:'Zen Maru Gothic',sans-serif;min-height:100vh;background-image:radial-gradient(#d4c6a4 1px,transparent 1px);background-size:13px 13px}
+.wrap{max-width:1050px;margin:auto;padding:24px 20px 48px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.brand{font-family:'DotGothic16',sans-serif;font-size:17px;letter-spacing:1px;color:#71866e}.sound{border:2px solid var(--line);background:var(--paper);border-radius:20px;padding:8px 14px;color:var(--ink);cursor:pointer}
+.hero{text-align:center;margin:4px 0 22px}.hero h1{font-family:'DotGothic16',sans-serif;font-size:clamp(25px,4vw,39px);margin:0 0 5px;color:#596f5b;letter-spacing:2px}.hero p{margin:0;color:#8d8976;font-size:14px}
+.game{background:var(--paper);border:3px solid #e8ddc1;border-radius:24px;padding:22px;box-shadow:0 8px 0 #e5d8bb,0 15px 28px #8b78501b}.bar{display:flex;align-items:center;gap:10px;margin-bottom:15px}.stage-pill{background:#e6eddf;border:2px solid #cfddc7;padding:7px 13px;border-radius:20px;font-weight:900;white-space:nowrap}.progress{display:flex;gap:5px;flex:1}.pip{height:8px;border-radius:6px;background:#eee7d6;flex:1}.pip.done{background:#9cba8e}.score{font-family:'DotGothic16';white-space:nowrap;font-size:14px}.mission{display:flex;justify-content:space-between;align-items:center;background:#fff5df;border:2px dashed #e6c99a;border-radius:15px;padding:12px 16px;margin-bottom:18px;gap:12px}.mission strong{font-size:17px}.mission small{display:block;color:#92876c;margin-top:2px}.goal{background:#fff;border-radius:12px;padding:7px 11px;white-space:nowrap;font-size:13px;color:#9b7448}
+.scene{border-radius:18px;background:linear-gradient(#d9eee4 0 25%,#d7e9cc 25% 32%,#bdcba4 32% 34%,#f1e9d4 34%);border:3px solid #c9d9bd;padding:17px 15px 12px;position:relative;overflow:hidden}.outside{position:absolute;top:10px;left:0;right:0;height:43px;text-align:center;font-family:'DotGothic16';color:#778d75;font-size:12px}.sun{position:absolute;right:9%;top:3px;width:22px;height:22px;background:#f6cf78;border-radius:50%;box-shadow:0 0 0 5px #f6cf7833}.car{margin-top:4px;background:#f9f3e5;border:4px solid #bea984;border-radius:18px;padding:13px 13px 11px;box-shadow:inset 0 -9px #ebdfc6,0 5px 0 #bda982;position:relative}.car:before{content:'北九州モノレール  /  1000形';position:absolute;top:-23px;left:14px;font-family:'DotGothic16';font-size:10px;color:#877b5f}.layout{display:grid;grid-template-columns:minmax(0,1fr) 38px minmax(0,1fr);gap:7px;align-items:center}.side{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.aisle{text-align:center;color:#b3a787;font-family:'DotGothic16';font-size:9px;writing-mode:vertical-rl;justify-self:center;letter-spacing:3px;border-left:2px dashed #ded2b6;border-right:2px dashed #ded2b6;padding:5px 8px;height:100%;display:flex;align-items:center;justify-content:center}.seat{height:47px;border:2px solid #b7c69e;border-radius:12px;background:#e7efda;display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer;transition:.15s;box-shadow:0 3px 0 #ccdac0}.seat:hover{transform:translateY(-2px)}.seat.window:before{content:'✦';position:absolute;top:1px;font-size:8px;color:#9fb8be}.seat.occupied{background:#f8e9d5;border-color:#d9ba92;box-shadow:0 3px 0 #e7d1b1}.seat.selected{outline:3px solid #e8a56f;outline-offset:2px}.seat .num{position:absolute;bottom:1px;right:4px;font-size:8px;color:#9a997f}.avatar{width:30px;height:38px;display:flex;align-items:center;justify-content:center;overflow:hidden}.avatar img,.face img{width:100%;height:100%;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(1px 2px 0 #ffffffa0)}.seat-hint{text-align:center;margin-top:9px;font-size:11px;color:#9b947c}.people-title{font-weight:900;margin:19px 0 9px}.passengers{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 9px}.person{min-width:132px;border:2px solid #e5ddc9;background:#fffdf5;border-radius:15px;padding:9px 10px;cursor:pointer;transition:.15s}.person:hover{transform:translateY(-2px)}.person.active{border-color:#e5a66e;background:#fff4df;box-shadow:0 3px 0 #f1d6b8}.person.done{opacity:.57;background:#edf3e8}.person-head{display:flex;align-items:center;gap:7px}.face{width:34px;height:42px;flex:none;display:inline-flex;align-items:center;justify-content:center;overflow:hidden}.pname{font-weight:900;font-size:13px}.wish{font-size:11px;color:#8b846e;margin-top:5px;line-height:1.4}.bottom{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:10px}.tip{font-size:12px;color:#928b76}.buttons{display:flex;gap:8px}.btn{border:0;border-radius:12px;padding:10px 15px;font:700 13px inherit;cursor:pointer}.reset{background:#f0eadb;color:#77715f}.next{background:#789372;color:white;box-shadow:0 3px 0 #5d7758}.next:disabled{opacity:.45;cursor:not-allowed}.toast{min-height:22px;text-align:center;font-size:13px;color:#71886d;font-weight:700;margin-top:9px}.result{position:fixed;inset:0;background:#343d3566;display:none;place-items:center;padding:20px;z-index:5}.result.show{display:grid}.card{max-width:420px;max-height:calc(100vh - 40px);overflow-y:auto;width:100%;text-align:center;background:#fff9e9;border:4px solid #e6d8b8;border-radius:24px;padding:26px;box-shadow:0 10px 0 #d4c39e}.card h2{font-family:'DotGothic16';color:#71876c;margin:4px}.stars{font-size:30px;margin:8px}.card p{line-height:1.8;color:#817b68}.final-score{display:inline-block;margin:6px 0;font-family:'DotGothic16';font-size:27px;color:#315a73;text-shadow:2px 2px 0 #d7c47c}.card button{margin-top:8px}.feedback-list{max-height:220px;overflow:auto;text-align:left;border-top:2px dashed #c9bc98;padding-top:8px;margin-top:8px;font-size:11px;line-height:1.55}.feedback-row{padding:3px 2px;border-bottom:1px dotted #d8cdae}.feedback-ok{color:#3c744d}.feedback-miss{color:#a05d4e}.seat.locked,.strap-spot.locked{filter:grayscale(.8);background:#d0d0c8!important;box-shadow:inset 0 0 0 2px #83877d,2px 2px 0 #a8a89e!important;cursor:not-allowed;opacity:.9}.locked-tag{position:absolute;top:1px;left:2px;z-index:5;background:#5f6860;color:#fff8df;padding:0 2px;font:7px 'DotGothic16';line-height:1.3}.strap-spot .locked-tag{top:auto;bottom:0;left:50%;transform:translateX(-50%)}.locked-passenger{opacity:.75;background:#e1e2d9!important}.footer{text-align:center;color:#aaa187;font-size:11px;margin:21px}
+.train-front{display:flex;align-items:center;justify-content:flex-end;gap:7px;padding:0 8px 5px;color:#70866c;font-family:'DotGothic16';font-size:11px}.front-arrow{font-size:20px;line-height:1;color:#df9b65}.car-shell{position:relative;padding-top:3px}.car{display:flex;align-items:stretch;min-height:260px;margin:0;background:#f9f3e5;border:4px solid #9d9e93;border-radius:28px;padding:13px 12px 12px;box-shadow:inset 0 -8px #ebdfc6,0 5px 0 #bda982;position:relative;gap:10px}.cabin{flex:1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(2,1fr) 38px repeat(2,1fr);column-gap:13px;row-gap:7px;align-items:center;padding:8px 3px;position:relative}.cabin:before{content:none}.seat{height:45px;width:100%;max-width:58px;justify-self:center;border:2px solid #91968c;border-right:7px solid #e5c76d;border-radius:2px 7px 7px 2px;background:#fffdf5;display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer;transition:.15s;box-shadow:0 2px 0 #d7d0bc}.seat:hover{transform:translateY(-2px)}.seat.window:before{content:'✦';position:absolute;top:1px;font-size:8px;color:#9fb8be}.seat.occupied{background:#f8e9d5;border-color:#ba9876;border-right-color:#e5b66d}.seat.selected{outline:3px solid #e8a56f;outline-offset:2px}.seat .num{position:absolute;bottom:1px;left:3px;font-size:8px;color:#9a997f}.avatar{width:30px;height:38px;display:flex;align-items:center;justify-content:center;overflow:hidden}.avatar img,.face img{width:100%;height:100%;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(1px 2px 0 #ffffffa0)}.driver{width:45px;flex:none;margin-left:4px;border-left:3px solid #4b88ad;display:flex;align-items:center;justify-content:center;color:#315a73;font-size:24px;position:relative;background:#dce9ed}.driver:after{content:'運転席';position:absolute;bottom:2px;font:9px 'DotGothic16';writing-mode:vertical-rl}.seat-hint{text-align:center;margin-top:9px;font-size:11px;color:#9b947c}.wheelset{display:flex;justify-content:space-around;margin:4px 8% -4px 14%}.wheelset i{width:25px;height:20px;background:#74756a;border:4px solid #c3b99e;border-radius:7px}
+@media(max-width:640px){.wrap{padding:14px 10px 32px}.game{padding:14px 11px}.bar{flex-wrap:wrap}.progress{order:3;flex-basis:100%}.mission{align-items:flex-start}.mission strong{font-size:15px}.scene{padding:13px 8px 9px}.car{min-height:155px;padding:10px 7px;gap:5px}.cabin{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(2,1fr) 32px repeat(2,1fr);column-gap:7px;row-gap:5px;padding:5px 0}.cabin:before{content:none}.seat{height:31px;max-width:43px;border-right-width:6px}.avatar{width:24px;height:31px}.driver{width:31px;font-size:19px}.driver:after{font-size:8px}.bottom{align-items:flex-start;flex-direction:column}.buttons{align-self:flex-end}}
+
+/* DOT ILLUSTの人物素材に合わせたピクセル調UI */
+:root{--ink:#273b38;--paper:#fff7df;--line:#3c5149;--green:#77936b;--orange:#e8b84f;--cream:#fff7df}
+body{background-color:#d8dfbd;background-image:linear-gradient(90deg,#cbd5b0 1px,transparent 1px),linear-gradient(#cbd5b0 1px,transparent 1px);background-size:16px 16px;font-family:'DotGothic16',monospace;color:var(--ink)}
+.wrap{max-width:1120px}.brand,.hero h1,.stage-pill,.score,.mission strong,.person .pname,.goal,.btn,.seat-hint,.footer{font-family:'DotGothic16',monospace}
+.hero h1{color:#2f5147;text-shadow:3px 3px 0 #f4d77c;letter-spacing:1px}.hero p{color:#52675b}
+.game{background:var(--paper);border:4px solid #3b5048;border-radius:0;box-shadow:8px 8px 0 #91a078,14px 14px 0 #43564b22;padding:20px}
+.stage-pill{background:#c8d8ac;border:3px solid #3b5048;border-radius:0;box-shadow:3px 3px 0 #8da078}
+.progress{gap:4px}.pip{height:10px;border-radius:0;border:1px solid #71816a;background:#e6dfc2}.pip.done{background:#7ea06e}
+.mission{background:#f7e6ab;border:3px solid #3b5048;border-radius:0;box-shadow:4px 4px 0 #d3bd77}.mission small{color:#55644d}.goal{background:#fff7df;border:2px solid #b98d3e;border-radius:0;color:#795928}
+.scene{border-radius:0;border:4px solid #3b5048;background:linear-gradient(#9fc9c3 0 25%,#b8d59a 25% 32%,#7e9a67 32% 35%,#dfd5aa 35%);box-shadow:inset 0 -6px #bcae7e}
+.outside{font-family:'DotGothic16',monospace;color:#35574d}.sun{border-radius:0;box-shadow:4px 0 #f6cf78,-4px 0 #f6cf78,0 4px #f6cf78,0 -4px #f6cf78}
+.train-front{font-family:'DotGothic16',monospace;color:#315a73}.train-front span:first-child{background:#d8e9ed;border:2px solid #4b88ad;padding:2px 6px}.front-arrow{color:#ca713c;text-shadow:2px 2px 0 #f8da8b}
+.car{border:4px solid #315a73;border-radius:0;background:linear-gradient(180deg,#4b88ad 0 8px,#f2efd9 8px calc(100% - 8px),#4b88ad calc(100% - 8px) 100%);box-shadow:inset 0 -8px #d0c39b,0 5px 0 #718493}
+.car:before{content:none}
+
+.cabin{column-gap:15px;row-gap:8px;background:#f2efd9}.cabin:before{color:#576452;border-color:#8a9273;background:#dfd7b3}
+.seat{border:2px solid #687b63;border-left:7px solid #526b58;border-right:2px solid #687b63;border-radius:0;background:#bfd0a8;box-shadow:2px 2px 0 #9ca17f;image-rendering:pixelated}
+.seat:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 #9ca17f}.seat.window:before{color:#559a9a;font-size:11px}.seat:after{content:'';position:absolute;right:-1px;top:50%;transform:translateY(-50%);width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:6px solid #8b9867}.seat.occupied{background:#f0d1a3;border-color:#687b63;border-left-color:#cb7748;box-shadow:2px 2px 0 #aa8a5c}.seat.selected{outline:3px dashed #d77844;outline-offset:2px}.seat .num{color:#45594d;font-family:'DotGothic16',monospace}.avatar{width:34px;height:43px}.avatar img,.face img{image-rendering:pixelated;filter:drop-shadow(2px 2px 0 #fff7df)}
+.wheelset i{width:38%;height:9px;border-radius:0;background:#68787d;border:2px solid #405960}
+.people-title{font-family:'DotGothic16',monospace;color:#344f43}.person{min-width:145px;border:3px solid #3b5048;border-radius:0;background:#f7efd4;padding:7px 9px;box-shadow:3px 3px 0 #a5a07c}.person:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 #a5a07c}.person.active{border-color:#c87442;background:#ffedbd;box-shadow:3px 3px 0 #c87442}.person.done{opacity:.8;background:#dce8c3}.person-head{min-height:45px}.face{width:38px;height:46px;background:#e5dfc2;border:2px solid #a59b76}.pname{color:#2d493e}.wish{font-family:'DotGothic16',monospace;color:#5b624e;line-height:1.55}
+.btn{border:3px solid #3b5048;border-radius:0;padding:9px 13px;box-shadow:3px 3px 0 #a39c7b}.btn:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 #a39c7b}.reset{background:#ded8bd;color:#3b5048}.next{background:#78966b;color:#fff8df;box-shadow:3px 3px 0 #405a45}.next:hover{box-shadow:5px 5px 0 #405a45}.next:disabled{opacity:.48}.sound{font-family:'DotGothic16',monospace;border:3px solid #3b5048;border-radius:0;background:#fff7df;box-shadow:3px 3px 0 #a39c7b}
+.toast{font-family:'DotGothic16',monospace;color:#456b4c}.footer{color:#596650}.footer a{color:#486f68}
+.result{background:#24342ebd}.card{background:#fff3cf;border:4px solid #3b5048;border-radius:0;box-shadow:8px 8px 0 #17251c99}.card h2{color:#3f6650}.stars{color:#be803d}
+@media(max-width:640px){.game{padding:14px 11px;box-shadow:5px 5px 0 #91a078}.mission{box-shadow:3px 3px 0 #d3bd77}.seat{height:31px}.avatar{width:25px;height:31px}.person{min-width:137px}.cabin{column-gap:7px}}
+
+
+.car:before{content:none!important;display:none}.sun{display:none!important}
+.driver{width:72px;height:auto;min-height:0;align-self:stretch;flex:none;margin-left:3px;border-left:4px solid #315a73;background:#cadde2;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:9px;padding:10px 4px;color:#315a73}
+.driver:after{content:none;display:none}.instrument-stack{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:2px}.gauge{width:25px;height:25px;display:block;position:relative;border:3px solid #315a73;border-radius:50%;background:#e7e4c8;box-shadow:2px 2px 0 #84989a}.gauge:before{content:'';position:absolute;left:10px;top:4px;width:2px;height:8px;background:#c65f4a;transform:rotate(35deg);transform-origin:bottom center}.gauge:after{content:'';position:absolute;width:4px;height:4px;left:8px;top:8px;background:#315a73;border-radius:50%}.driver-label{margin-top:auto;font:9px 'DotGothic16',monospace;color:#315a73;writing-mode:vertical-rl}
+@media(max-width:640px){.driver{width:54px;height:auto;min-height:0;align-self:stretch;padding:8px 3px;gap:6px}.instrument-stack{gap:6px}.gauge{width:20px;height:20px;border-width:2px}.gauge:before{left:8px;top:3px;height:6px}.gauge:after{left:6px;top:6px}}
+
+.aisle-row{grid-column:1/5;grid-row:3;align-self:stretch;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:0 4px;border-top:2px dashed #8a9273;border-bottom:2px dashed #8a9273;background:#e4ddbe;z-index:1}.aisle-label{font:8px 'DotGothic16';color:#576452;writing-mode:vertical-rl}.strap-spots{flex:1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-items:center;justify-items:center}.strap-spot{height:34px;min-width:30px;width:100%;position:relative;display:flex;align-items:flex-end;justify-content:center;cursor:pointer;color:#59614e;font:8px 'DotGothic16'}.strap-spot:hover{background:#f5edcf}.strap-spot.occupied{background:#f0d1a3;outline:2px solid #315a73}.strap-cord{position:absolute;top:0;left:50%;width:2px;height:8px;background:#53645e}.strap-handle{position:absolute;top:6px;left:calc(50% - 5px);width:10px;height:9px;border:2px solid #bd9a3e;border-radius:50% 50% 3px 3px;background:#fff5d9}.standing-avatar{width:22px;height:25px;overflow:hidden;display:block}.standing-avatar img{width:100%;height:100%;object-fit:contain;image-rendering:pixelated}.standing-label{padding-bottom:3px}
+@media(max-width:640px){.aisle-row{padding:0 2px;gap:3px}.strap-spot{height:29px;min-width:22px;font-size:7px}.strap-cord{height:6px}.strap-handle{top:4px}}
+
+
+/* 通勤電車のロングシート平面図 */
+.cabin{grid-template-columns:42px 25px repeat(3,minmax(0,1fr)) 25px repeat(3,minmax(0,1fr)) 25px 42px;grid-template-rows:minmax(58px,1fr) 74px minmax(58px,1fr);column-gap:0;row-gap:0;align-items:stretch;padding:7px 4px;background:linear-gradient(180deg,#d3e0c4 0 6px,#f2efd9 6px calc(100% - 6px),#d3e0c4 calc(100% - 6px) 100%)}
+.cabin:before{content:none!important}.aisle-row{grid-column:1/12!important;grid-row:2!important;align-self:stretch;background:#e7e1c8;border-top:3px solid #76836c;border-bottom:3px solid #76836c;padding:0 8px;gap:12px}.aisle-label{font-size:10px;writing-mode:vertical-rl;color:#4b594b}.strap-spots{grid-template-columns:repeat(4,minmax(28px,1fr));gap:10px;max-width:380px;margin:auto}.strap-spot{height:54px;max-width:54px;border-left:1px dashed #c0b995;border-right:1px dashed #c0b995;font-size:9px}.strap-cord{height:13px}.strap-handle{top:11px;width:13px;height:11px;left:calc(50% - 6px)}
+.seat{height:auto;min-height:54px;max-width:none;width:100%;border:1px solid #62745e;border-left:5px solid #4e6955;border-right:2px solid #62745e;background:#b9cba4;box-shadow:inset 0 -5px #9cb48a,1px 2px 0 #899778;display:flex;align-items:center;justify-content:center}.seat:after{content:none}.seat .num{left:3px;right:auto;bottom:2px;font-size:8px;color:#405640}.seat .zone-tag{position:absolute;top:1px;right:2px;font:7px 'DotGothic16';color:#53634f;background:#edf0d8;padding:0 2px}.seat.occupied{background:#e9cb9c;border-color:#62745e;border-left-color:#bd7048}.seat.selected{outline:3px dashed #d77844}.seat .avatar{width:28px;height:38px}.car-door{align-self:stretch;justify-self:stretch;display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(90deg,#b9d9d8 0 5px,#d8e9e3 5px 10px);border:2px solid #4b7880;position:relative;color:#315a73;font:8px 'DotGothic16';writing-mode:vertical-rl;box-shadow:inset 2px 0 #edf1df,inset -2px 0 #edf1df}.car-door:before,.car-door:after{content:'';position:absolute;top:50%;width:3px;height:10px;background:#658b88}.car-door:before{left:2px}.car-door:after{right:2px}
+.car-shell{max-width:100%;overflow-x:auto;padding:4px 12px 10px}.car{min-height:260px;width:100%;gap:8px;padding:10px 8px}.car:before{content:''!important;display:block!important;position:absolute;z-index:2;left:-11px;top:calc(50% - 10px);width:10px;height:20px;background:#737b7d;border:2px solid #315a73;box-shadow:inset 0 0 0 3px #bac6bb}.car:after{content:'';position:absolute;z-index:2;right:-11px;top:calc(50% - 10px);width:10px;height:20px;background:#737b7d;border:2px solid #315a73;box-shadow:inset 0 0 0 3px #bac6bb}.driver{width:60px}
+@media(max-width:640px){.cabin{grid-template-columns:34px 20px repeat(3,minmax(0,1fr)) 20px repeat(3,minmax(0,1fr)) 20px 34px;grid-template-rows:minmax(45px,1fr) 58px minmax(45px,1fr);column-gap:2px;padding:5px 2px}.car-shell{padding:4px 10px 9px}.car{min-width:0;min-height:215px;padding:8px 6px;gap:5px}.aisle-row{padding:0 5px;gap:7px}.strap-spots{gap:5px}.strap-spot{height:44px;min-width:26px}.strap-handle{top:8px}.seat{min-height:43px}.seat .avatar{width:23px;height:32px}.car-door{font-size:7px}.driver{width:54px}}
+
+
+/* 右端を運転室壁、左端だけを連結部にした7席ロングシート */
+.cabin{grid-template-columns:20px repeat(2,minmax(0,1fr)) 26px repeat(3,minmax(0,1fr)) 26px repeat(2,minmax(0,1fr)) 34px;grid-template-rows:minmax(72px,1fr) 74px minmax(72px,1fr);column-gap:4px;row-gap:0;padding:7px 3px}
+.aisle-row{grid-column:1/12!important;grid-row:2!important}.car-door{grid-column:auto;min-height:0}.coupler-gap{grid-column:1;grid-row:1/4;align-self:stretch;display:flex;align-items:center;justify-content:center;background:#78817e;border:3px solid #315a73;box-shadow:inset 0 0 0 4px #c7cdbb;color:#f3eed8;font:8px 'DotGothic16';writing-mode:vertical-rl}.cab-wall{grid-column:11;grid-row:1/4;align-self:stretch;display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(90deg,#7e9695 0 4px,#a9c0b7 4px 8px);border-left:4px solid #315a73;border-right:3px solid #315a73;color:#274d56;font:8px 'DotGothic16';writing-mode:vertical-rl;letter-spacing:1px}
+.seat{width:100%;max-width:88px;min-height:0;height:auto;aspect-ratio:1/1;justify-self:center;align-self:center;border:2px solid #62745e;border-left:5px solid #4e6955;border-right:2px solid #62745e;box-shadow:inset 0 -5px #9cb48a,1px 2px 0 #899778}.seat .avatar{width:30px;height:42px}.seat .num{font-size:8px}.seat .zone-tag{font-size:7px}.car:after{content:none!important;display:none!important}
+@media(max-width:640px){.cabin{grid-template-columns:18px repeat(2,minmax(0,1fr)) 22px repeat(3,minmax(0,1fr)) 22px repeat(2,minmax(0,1fr)) 28px;grid-template-rows:minmax(62px,1fr) 62px minmax(62px,1fr);column-gap:3px;padding:5px 2px}.car{min-width:0;min-height:215px}.seat{max-width:66px}.seat .avatar{width:24px;height:34px}.coupler-gap,.cab-wall{font-size:7px}.car-door{font-size:7px}}
+
+
+/* 窓・座席・袖仕切りの描画を分けた通勤車内 */
+.cabin{grid-template-rows:16px minmax(72px,1fr) 74px minmax(72px,1fr) 16px;background:#eee8d3}
+.aisle-row{grid-row:3!important}.window-strip{align-self:stretch;min-width:0;background:linear-gradient(180deg,#b5e0e3 0%,#79c6d2 42%,#e0f2ec 52%,#8acdd2 100%);border:2px solid #4d7d86;box-shadow:inset 2px 0 #e5f5ec,inset -2px 0 #e5f5ec,0 2px 0 #86947a;position:relative}.window-strip:after{content:'';position:absolute;left:15%;top:3px;width:22%;height:2px;background:#effbf0;box-shadow:24px 0 #dff7f2}
+.coupler-gap{grid-row:1/6!important}.cab-wall{grid-row:1/6!important}
+.seat{position:relative;overflow:visible;border:1px solid #675d59!important;border-radius:5px!important;width:100%;max-width:88px;min-height:0;height:auto;aspect-ratio:1/1;justify-self:center;align-self:center;box-shadow:inset 0 2px #ffffff9c,0 2px 0 #766c5b!important;display:flex;align-items:center;justify-content:center}
+.seat.top-bank{background:#cf8176!important}.seat.bottom-bank{background:#78b7bb!important}.seat.top-bank:before,.seat.bottom-bank:before{content:'';position:absolute;left:2px;right:2px;height:9px;border-radius:3px;background:#885d5a;box-shadow:inset 0 2px #ffffff55;z-index:1}.seat.top-bank:before{top:2px}.seat.bottom-bank:before{bottom:2px}.seat.top-bank.occupied{background:#db9284!important}.seat.bottom-bank.occupied{background:#83c2c2!important}
+.seat.group-start:after,.seat.group-end:after{content:'';position:absolute;top:-3px;bottom:-3px;width:5px;border:1px solid #a79a7b;border-radius:2px;background:#e9dfc2;box-shadow:inset 0 0 0 1px #fff9e5;z-index:3}.seat.group-start:after{left:-6px}.seat.group-end:after{right:-6px}
+.seat .avatar{width:29px;height:39px;z-index:2}.seat .num{left:3px;right:auto;bottom:2px;z-index:4;color:#fff8df;text-shadow:1px 1px #564a3e}.seat .zone-tag{z-index:4;background:#fff5dc;color:#44544b;border:1px solid #827760}
+@media(max-width:640px){.cabin{grid-template-rows:14px minmax(62px,1fr) 62px minmax(62px,1fr) 14px}.seat{max-width:66px}.seat .avatar{width:24px;height:34px}.window-strip{border-width:1px}.seat.top-bank:before,.seat.bottom-bank:before{height:7px}.seat.group-start:after,.seat.group-end:after{width:4px}}
+
+.seat.locked,.strap-spot.locked{opacity:.72;filter:saturate(.65);cursor:not-allowed;background:#d8d5c2!important}
+
+.seat,.strap-spot,.person,.btn{touch-action:manipulation}
+@media(max-width:640px){
+  .wrap{padding:8px 8px 16px}
+  .top{margin-bottom:7px}
+  .hero{margin:3px 0 9px}
+  .hero h1{font-size:23px}
+  .hero p{font-size:11px}
+  .game{padding:10px 8px;box-shadow:4px 4px 0 #91a078}
+  .bar{gap:6px;margin-bottom:8px}
+  .stage-pill{padding:5px 8px;font-size:12px}
+  .mission{padding:8px;margin-bottom:9px;gap:6px}
+  .mission strong{font-size:14px}
+  .mission small{font-size:10px;line-height:1.35}
+  .goal{font-size:10px;padding:5px 6px;white-space:normal}
+  .scene{padding:8px 5px 6px}
+  .outside{top:4px;height:28px;font-size:9px}
+  .train-front{padding:0 4px 3px;font-size:9px}
+  .car-shell{width:100%;max-width:100%;padding:2px 0 6px;overflow:hidden}
+  .car{width:100%;min-width:0;min-height:0;gap:3px;padding:6px 4px}
+  .cabin{flex:1 1 0;min-width:0;grid-template-columns:12px repeat(2,minmax(0,1fr)) 16px repeat(3,minmax(0,1fr)) 16px repeat(2,minmax(0,1fr)) 18px;grid-template-rows:10px minmax(48px,1fr) 48px minmax(48px,1fr) 10px;column-gap:1px;padding:3px 1px}
+  .coupler-gap,.cab-wall{min-width:0;font-size:6px;letter-spacing:0}
+  .driver{width:clamp(36px,11vw,42px);min-width:36px;margin-left:0;border-left-width:2px;padding:6px 2px;gap:5px}
+  .instrument-stack{gap:5px}
+  .gauge{width:16px;height:16px;border-width:2px}
+  .gauge:before{left:6px;top:2px;height:5px}
+  .gauge:after{left:5px;top:5px;width:3px;height:3px}
+  .driver-label{font-size:7px}
+  .seat{width:min(100%,27px);max-width:none;min-width:0;min-height:0;height:auto;aspect-ratio:1/1;border-left-width:3px;border-right-width:1px;border-radius:3px!important}
+  .seat .avatar{width:14px;height:21px}
+  .seat .zone-tag{font-size:5px;right:1px;padding:0}
+  .seat .num{font-size:6px;left:1px;bottom:0}
+  .seat.group-start:after,.seat.group-end:after{width:3px;left:auto;right:auto}
+  .seat.group-start:after{left:-3px}
+  .seat.group-end:after{right:-3px}
+  .window-strip{min-height:8px}
+  .aisle-row{grid-row:3!important;min-width:0;padding:0 3px;gap:3px}
+  .aisle-label{font-size:7px}
+  .strap-spots{grid-template-columns:repeat(4,minmax(0,1fr));min-width:0;gap:2px}
+  .strap-spot{width:100%;min-width:0;height:38px;font-size:6px}
+  .strap-cord{height:7px}
+  .strap-handle{top:6px;width:9px;height:8px;left:calc(50% - 4px)}
+  .standing-avatar{width:17px;height:22px}
+  .seat-hint{font-size:8px;margin-top:4px}
+  .people-title{margin:9px 0 5px;font-size:13px}
+  .passengers{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;padding:0;overflow:visible}
+  .person{min-width:0;width:100%;padding:5px 6px;border-width:2px}
+  .person-head{gap:5px;min-height:0}
+  .face{width:28px;height:32px}
+  .pname{font-size:11px}
+  .wish{font-size:9px;line-height:1.3;margin-top:3px}
+  .bottom{margin-top:8px;gap:5px;align-items:stretch;flex-direction:column}
+  .tip{font-size:10px}
+  .buttons{width:100%;display:grid;grid-template-columns:1fr 1.25fr;gap:6px;align-self:stretch}
+  .btn{min-height:44px;padding:7px 8px;font-size:12px}
+  .toast{min-height:18px;margin-top:4px;font-size:10px;line-height:1.3}
+  .footer{margin:10px 0;font-size:9px}
+}
+</style></head>
+<body><main class="wrap"><div class="top"><div class="brand">🚝 北九州モノレール</div><button class="sound" id="sound">♪ モノレール運行中</button></div><header class="hero"><h1>北九州モノレールの席えらび</h1><p>小倉駅から企救丘駅へ、13駅の旅</p></header>
+<section class="game"><div class="bar"><div class="stage-pill" id="stageLabel">STAGE 1 / 13</div><div class="progress" id="progress"></div><div class="score">★ <span id="totalScore">0</span> pt</div></div>
+<div class="mission"><div><strong id="stageTitle"></strong><small id="stageDesc"></small></div><div class="goal" id="goal"></div></div>
+<div class="scene"><div class="outside">高架軌道から小倉の街を見下ろして…</div><div class="train-front"><span>企救丘ゆき</span><span class="front-arrow">▶</span></div><div class="car-shell"><div class="car"><div class="cabin" id="seatGrid"></div><div class="driver" aria-label="運転席"><div class="instrument-stack" aria-label="丸い計器が3つ"><i class="gauge"></i><i class="gauge"></i><i class="gauge"></i></div><span class="driver-label">運転席</span></div></div><div class="wheelset" aria-hidden="true"><i></i><i></i></div></div><div class="seat-hint">壁沿いロングシート：ドア横・真ん中・連結部の席　／　隣席は同じベンチ内のみ　／　吊り革で立てます</div></div>
+<div class="people-title">乗客さん <span style="font-size:12px;color:#9a927b;font-weight:500">（乗客を選んでから席をタップ）</span></div><div class="passengers" id="passengers"></div>
+<div class="bottom"><div class="tip" id="tip">希望をかなえるとボーナスがもらえるよ。</div><div class="buttons"><button class="btn reset" id="reset">やりなおす</button><button class="btn next" id="next" disabled>採点する →</button></div></div><div class="toast" id="toast"></div></section><div class="footer">あせらず、のんびり。いい旅になりますように。 ☁<br><a href="https://dot-illust.net/category/character/" target="_blank" rel="noopener">人物ドット絵：DOT ILLUST</a></div></main>
+<div class="result" id="result"><div class="card"><div id="resultIcon" style="font-size:40px">🚝</div><h2 id="resultTitle">いい旅でした！</h2><div class="stars" id="resultStars"></div><p id="resultText"></p><div id="resultFeedback" class="feedback-list"></div><button class="btn next" id="resultNext">つぎの駅へ →</button></div></div>
+<script>
+const faces=['character_gakusei_man_blazer_01_black','character_gakusei_woman_blazer_01_black','character_gakusei_man_blazer_02_brown','character_gakusei_woman_blazer_02_brown','character_gakusei_woman_sailor_01_white','character_gakusei_man_gakuran_02_gray','character_shakaijin_man_01_black_black','character_shakaijin_woman_01_black','character_shakaijin_man_02_gray_black','character_shakaijin_woman_02_gray','character_shakaijin_man_03_black_black','character_shakaijin_woman_03_black','character_shakaijin_man_silver_black','character_shakaijin_woman_04_gray','character_shakaijin_woman_05_black'];
+const names=['はると','さくら','りく','みどり','けんじ','あおい','ゆう','ふみ','こはる','たくみ','もも','そうた','なぎ','ゆき','れん'];
+function portrait(id){return `<img src="assets/dot-illust/${faces[id]}.png" alt="${names[id]}のドット絵" draggable="false">`}
+
+const stagePassengers=[
+  [0, 1],
+  [2, 3, 4],
+  [6, 7, 5],
+  [8, 9, 12],
+  [10, 11, 13],
+  [14, 0, 1],
+  [2, 3, 4, 5],
+  [6, 7, 8, 9],
+  [12, 13, 14],
+  [10, 11, 0, 1],
+  [4, 5, 8, 9],
+  [6, 7, 12, 13],
+  [10, 11, 1, 9]
+];
+
+const basePreferenceTypes=['coupler','door_end','middle','quiet','door_end','middle','friend','friend','coupler','door_end','friend','friend','coupler','middle','quiet'];
+const preferenceCopy={
+  stand_strap:['もうすぐ降りるから立っていたい','吊り革につかまりたい'],
+  near_driver:['運転席の近くがいい','前の景色を見たい！'],
+  side_north:['景色が見やすい上側の席がいい','上側の席に座りたい'],
+  side_south:['日差しを避けたいから下側の席がいい','下側の席が落ち着く']
+};
+
+const stagePreferenceOverrides={
+  0:{1:'stand_strap'},
+  3:{12:'near_driver'},
+  4:{13:'stand_strap'},
+  5:{14:'side_south',0:'side_north'},
+  6:{2:'near_driver'},
+  7:{8:'stand_strap'},
+  8:{12:['near_driver','side_south']},
+  9:{1:['near_driver','side_north']},
+  10:{4:['near_driver','stand_strap'],5:['side_north','middle'],8:'stand_strap'},
+  11:{12:'near_driver',13:'stand_strap'},
+  12:{1:['near_driver','side_north'],9:['side_south','door_end']}
+};
+
+const stages=[
+  ['小倉駅','連結部付近か吊り革の立ち位置を探そう。','希望をすべてかなえる',2,2],
+  ['平和通駅','前の駅のお客さんが乗っているよ。空き席を見極めよう。','希望をすべてかなえる',3,3],
+  ['旦過駅','ゆうとふみは、お互いに相手の隣が希望だよ。','友だちの希望をかなえる',3,3],
+  ['香春口三萩野駅','運転席近くや連結部の座席位置を見きわめよう。','座席位置の希望をかなえる',3,3],
+  ['片野駅','ももとそうたが乗車！隣同士になれるベンチを探そう。','友だちの希望をかなえる',3,3],
+  ['城野駅','上側・下側の希望に合わせて席を決めよう。','希望をすべてかなえる',3,3],
+  ['北方駅','静かに一人で座りたい人のために隣を空けよう。','ひとり席を確保',4,4],
+  ['競馬場前駅','ゆうとふみが再び乗車！立っていたい人は吊り革へ。','希望をすべてかなえる',4,4],
+  ['守恒駅','複合条件が登場！「運転席近く＋下側」の席を探そう。','複合条件をクリア',3,3],
+  ['徳力公団前駅','もも・そうたペアと、運転席近く＋上側の席を確保しよう。','希望をすべてかなえる',4,4],
+  ['徳力嵐山口駅','運転席近くの吊り革や上側真ん中などピンポイント指定！','希望をすべてかなえる',4,4],
+  ['志井駅','前の駅のお客さんの位置を避けつつ、ペア席を確保しよう。','友だち同士で隣席に',4,4],
+  ['企救丘駅','終点まであと少し！全員の希望を100%かなえよう。','満足度 100%達成',4,4]
+];
+
+let stage=0,total=0,assigned={},lockedAssigned={},selected=null;
+function passengerIds(){return stagePassengers[stage]}
+const friendOf={6:7,7:6,10:11,11:10};
+const slotData=[...Array.from({length:14},(_,id)=>({id,type:'seat',side:id<7?'north':'south',isNearDriver:[5,6].includes(id%7)})),...Array.from({length:4},(_,i)=>({id:14+i,type:'strap',side:'center',isNearDriver:i===3}))];
+const slotById=Object.fromEntries(slotData.map(slot=>[slot.id,slot]));
+
+function singlePrefText(type,id){
+  if(type==='friend')return `友だちの${names[friendOf[id]]}さんのとなりがいい`;
+  if(preferenceCopy[type])return preferenceCopy[type][id%preferenceCopy[type].length];
+  return {coupler:'連結部に近い席がいい',door_end:'ドア横の端席がいい',middle:'真ん中の席がいい',quiet:'静かに一人で座りたい'}[type];
+}
+
+function preferenceFor(id){
+  const raw=stagePreferenceOverrides[stage]?.[id]||basePreferenceTypes[id];
+  const types=Array.isArray(raw)?raw:[raw];
+  const text=types.map((t,idx)=>{
+    const str=singlePrefText(t,id);
+    return idx===0?str:str.replace(/がいい$|たい$\vert{}落ち着く$/,'');
+  }).join(' ＋ ');
+  return {types,text};
+}
+
+function areNeighbors(a,b){
+  if(a===undefined||b===undefined||a>=14||b>=14)return false;
+  let bankA=Math.floor(a/7),bankB=Math.floor(b/7),posA=a%7,posB=b%7;
+  let groupA=posA<=1?0:posA<=4?1:2,groupB=posB<=1?0:posB<=4?1:2;
+  return bankA===bankB&&groupA===groupB&&Math.abs(posA-posB)===1;
+}
+
+function render(){
+  const [title,desc,goal]=stages[stage];
+  const ids=passengerIds();
+  const count=ids.length;
+  document.getElementById('stageLabel').textContent=`STAGE ${stage+1} / 13`;
+  document.getElementById('stageTitle').textContent=title;
+  document.getElementById('stageDesc').textContent=desc;
+  document.getElementById('goal').textContent='目標：'+goal;
+  document.getElementById('totalScore').textContent=total;
+  document.getElementById('progress').innerHTML=stages.map((_,i)=>`<i class="pip ${i<stage?'done':''}"></i>`).join('');
+
+  const grid=document.getElementById('seatGrid');
+  grid.innerHTML='<div class="window-strip" style="grid-column:2/4;grid-row:1" aria-label="窓"></div><div class="window-strip" style="grid-column:5/8;grid-row:1" aria-label="窓"></div><div class="window-strip" style="grid-column:9/11;grid-row:1" aria-label="窓"></div><div class="window-strip" style="grid-column:2/4;grid-row:5" aria-label="窓"></div><div class="window-strip" style="grid-column:5/8;grid-row:5" aria-label="窓"></div><div class="window-strip" style="grid-column:9/11;grid-row:5" aria-label="窓"></div><div class="aisle-row" style="grid-column:1/12;grid-row:3"><span class="aisle-label">中央通路</span><div class="strap-spots" id="strapSpots"></div></div><div class="coupler-gap" style="grid-column:1;grid-row:1/6" title="連結部">連結部</div><div class="cab-wall" style="grid-column:11;grid-row:1/6">運転室壁</div>';
+  const seatColumns=[2,3,5,6,7,9,10];
+
+  for(const slot of slotData.filter(s=>s.type==='seat')){
+    let i=slot.id,el=document.createElement('div');
+    let lockedWho=Object.keys(lockedAssigned).find(k=>lockedAssigned[k]===i);
+    let currentWho=Object.keys(assigned).find(k=>assigned[k]===i);
+    let who=lockedWho!==undefined?lockedWho:currentWho;
+    let isLocked=lockedWho!==undefined;
+    let bank=Math.floor(i/7),pos=i%7,zone=pos===0?'連結':pos===6?'壁':pos===3?'中':'端';
+    el.className='seat '+(bank===0?'top-bank':'bottom-bank')+(pos===0?' coupler-seat':pos===6?' wall-seat':pos===3?' middle-seat':' door-end-seat')+([0,2,5].includes(pos)?' group-start':'')+([1,4,6].includes(pos)?' group-end':'')+(who!==undefined?' occupied':'')+(isLocked?' locked':'')+(selected!==null&&assigned[selected]===i?' selected':'');
+    el.style.gridColumn=String(seatColumns[pos]);
+    el.style.gridRow=String(bank===0?2:4);
+    el.innerHTML=`${who!==undefined?`<span class="avatar">${portrait(Number(who))}</span>`:''}<span class="zone-tag">${isLocked?'乗車中':zone}</span><span class="num">${i+1}</span>`;
+    el.onclick=()=>seatClick(i);
+    grid.appendChild(el);
+  }
+
+  for(let bank=0;bank<2;bank++){
+    for(const col of [4,8]){
+      let door=document.createElement('div');
+      door.className='car-door';
+      door.style.gridColumn=String(col);
+      door.style.gridRow=String(bank===0?2:4);
+      door.innerHTML='<span>ドア</span>';
+      grid.appendChild(door);
+    }
+  }
+
+  let strapSpots=document.getElementById('strapSpots');
+  for(const slot of slotData.filter(s=>s.type==='strap')){
+    let spotId=slot.id;
+    let lockedWho=Object.keys(lockedAssigned).find(k=>lockedAssigned[k]===spotId);
+    let currentWho=Object.keys(assigned).find(k=>assigned[k]===spotId);
+    let who=lockedWho!==undefined?lockedWho:currentWho;
+    let isLocked=lockedWho!==undefined;
+    let spot=document.createElement('div');
+    spot.className='strap-spot'+(who!==undefined?' occupied':'')+(isLocked?' locked':'');
+    spot.innerHTML=`<i class="strap-cord"></i><i class="strap-handle"></i>${who!==undefined?`<span class="standing-avatar">${portrait(Number(who))}</span>`:'<span class="standing-label">立</span>'}`;
+    spot.title=isLocked?'前の駅から乗車中':'吊り革につかまって立つ';
+    spot.onclick=()=>seatClick(spotId);
+    strapSpots.appendChild(spot);
+  }
+
+  document.getElementById('passengers').innerHTML=ids.map(id=>`<div class="person ${selected===id?'active':''} ${assigned[id]!==undefined?'done':''}" data-id="${id}"><div class="person-head"><span class="face">${portrait(id)}</span><span class="pname">${names[id]}</span></div><div class="wish">${preferenceFor(id).text}</div></div>`).join('');
+  document.querySelectorAll('.person').forEach(p=>p.onclick=()=>{let id=Number(p.dataset.id);selected=selected===id?null:id;render()});
+  document.getElementById('next').disabled=Object.keys(assigned).length<count;
+  const lockedCount=Object.keys(lockedAssigned).length;
+  document.getElementById('toast').textContent=Object.keys(assigned).length===count?'全員そろったよ！「採点する」を押してね。':(lockedCount>0?`前の駅から ${lockedCount}人 が乗車中だよ（次の駅で降ります）`:'');
+}
+
+function seatClick(i){
+  let isLocked=Object.values(lockedAssigned).includes(i);
+  if(isLocked){
+    document.getElementById('toast').textContent='前の駅から乗っているお客さんがいるよ（次の駅で降ります）。';
+    return;
+  }
+  if(selected===null){
+    document.getElementById('toast').textContent='先に乗客さんを選んでね。';
+    return;
+  }
+  let occupant=Object.keys(assigned).find(k=>assigned[k]===i);
+  if(occupant!==undefined&&Number(occupant)!==selected){
+    document.getElementById('toast').textContent='その席にはもう乗客さんがいるよ。';
+    return;
+  }
+  if(assigned[selected]===i){delete assigned[selected]}else{assigned[selected]=i}
+  selected=null;
+  render();
+}
+
+function singleConditionMet(type,slot,id){
+  if(!slot)return false;
+  const allOccupied={...lockedAssigned,...assigned};
+  switch(type){
+    case 'stand_strap':return slot.type==='strap';
+    case 'near_driver':return slot.isNearDriver;
+    case 'side_north':return slot.type==='seat'&&slot.side==='north';
+    case 'side_south':return slot.type==='seat'&&slot.side==='south';
+    case 'coupler':return slot.type==='seat'&&slot.id%7===0;
+    case 'door_end':return slot.type==='seat'&&[1,2,4,5].includes(slot.id%7);
+    case 'middle':return slot.type==='seat'&&slot.id%7===3;
+    case 'quiet':return slot.type==='seat'&&!Object.entries(allOccupied).some(([otherId,otherSlot])=>Number(otherId)!==id&&areNeighbors(slot.id,otherSlot));
+    case 'friend':return areNeighbors(slot.id,assigned[friendOf[id]]);
+  }
+  return false;
+}
+
+function preferenceMet(pref,slot,id){
+  if(!slot)return false;
+  return pref.types.every(type=>singleConditionMet(type,slot,id));
+}
+
+function score(){
+  let ids=passengerIds(),outcomes=ids.map(id=>{const pref=preferenceFor(id),slot=slotById[assigned[id]],met=preferenceMet(pref,slot,id);return {id,pref,met}}),satisfied=outcomes.filter(x=>x.met).length;
+  let points=Math.round(100*satisfied/ids.length);total+=points;let isFinal=stage===stages.length-1;
+  document.getElementById('resultStars').textContent=points===100?'★★★':points>=60?'★★☆':'★☆☆';
+  document.getElementById('resultTitle').textContent=isFinal?'13駅を完走！':points===100?'100%達成！完璧な案内！':points>=60?'いい感じの旅！':'次はもっといい旅に';
+  document.getElementById('resultText').innerHTML=isFinal?`全13ステージおつかれさま！<br>最終ステージの満足度は <b>${points}%</b>。<br>合計ポイント<br><strong class="final-score">${total} / ${stages.length*100} pt</strong><br>モノレールの旅を楽しんでくれてありがとう。`:`今回の満足度は <b>${points}%</b>！<br>乗客さんの希望を ${satisfied} / ${ids.length} 人かなえたよ。<br>（今回乗ったお客さんは次の駅まで乗っています）`;
+  document.getElementById('resultFeedback').innerHTML=outcomes.map(({id,pref,met})=>`<div class="feedback-row ${met?'feedback-ok':'feedback-miss'}"><b>${met?'✓ 達成':'・未達'} ${names[id]}</b>：${pref.text}</div>`).join('');
+  document.getElementById('resultIcon').textContent=isFinal?'🎉🚝':points===100?'🌟🚝':'🚝';
+  document.getElementById('resultNext').textContent=isFinal?'もう一度遊ぶ ↺':'つぎの駅へ →';
+  document.getElementById('result').classList.add('show');
+}
+
+document.getElementById('next').onclick=score;
+document.getElementById('reset').onclick=()=>{assigned={};selected=null;render()};
+document.getElementById('resultNext').onclick=()=>{
+  document.getElementById('result').classList.remove('show');
+  if(stage===12){
+    stage=0;total=0;lockedAssigned={};
+  }else{
+    lockedAssigned={...assigned};
+    stage++;
+  }
+  assigned={};selected=null;render();
+};
+document.getElementById('sound').onclick=e=>{e.currentTarget.textContent=e.currentTarget.textContent.includes('運行中')?'♪ しずかな車内':'♪ モノレール運行中'};
+render();
+</script></body></html>
