@@ -170,10 +170,14 @@ body{background-color:#d8dfbd;background-image:linear-gradient(90deg,#cbd5b0 1px
 
 .route-status{position:absolute;left:50%;top:4px;transform:translateX(-50%);padding:3px 8px;border:2px solid #516a53;border-radius:3px;background:#fff7df;color:#435c48;box-shadow:2px 2px 0 #425348;font:9px 'DotGothic16',sans-serif;white-space:nowrap}
 body.is-traveling .game,body.is-traveling .sound{pointer-events:none}
-body.is-traveling .platform-scene,body.is-traveling 
-body.is-traveling .car-shell{animation:train-suspension .2s ease-in-out infinite}
+body.is-traveling .platform-scene{display:none}
+.scene.is-running .car-shell{animation:monorail-frame-sway .24s ease-in-out infinite}
+.car.is-running{animation:monorail-body-bounce .18s ease-in-out infinite}
+body.is-traveling .route-status{animation:route-status-pulse .75s ease-in-out infinite alternate}
 @keyframes landscape-run{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-@keyframes train-suspension{0%,100%{transform:translateY(0)}50%{transform:translateY(2px)}}
+@keyframes monorail-frame-sway{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(1px) rotate(.12deg)}75%{transform:translateY(-1px) rotate(-.12deg)}}
+@keyframes monorail-body-bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(1.5px)}}
+@keyframes route-status-pulse{from{box-shadow:2px 2px 0 #425348}to{box-shadow:2px 2px 0 #425348,0 0 0 3px #fff7df55}}
 @media(max-width:640px){
   .outside{top:4px;height:37px;left:2%;right:2%}
   .station-board{right:3px;top:2px;min-width:48px;padding:1px 3px;border-width:1px}
