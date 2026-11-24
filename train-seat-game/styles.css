@@ -163,3 +163,34 @@ body{background-color:#d8dfbd;background-image:linear-gradient(90deg,#cbd5b0 1px
 .station-heading{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .next-station{display:inline-flex;align-items:center;white-space:nowrap;padding:3px 7px;border:1px solid #a9b784;border-radius:4px;background:#eff3d6;color:#536746;box-shadow:inset 0 0 0 1px #ffffffb0;font:10px 'DotGothic16',sans-serif;line-height:1.4}
 @media(max-width:640px){.station-heading{gap:5px}.next-station{padding:2px 5px;font-size:8px}}
+
+/* 走行中に窓の外を流れるドット絵風の沿線景色 */
+.outside{top:7px;left:3%;right:3%;height:51px;text-align:left;font-size:9px;z-index:1;pointer-events:none}
+.landscape-window{position:absolute;inset:0;overflow:hidden;border:2px solid #4f7980;border-radius:4px;background:#bce6f0;box-shadow:inset 0 0 0 2px #e8f3df}
+.landscape-track{position:absolute;inset:0 auto 0 0;width:200%;height:100%;display:flex;will-change:transform}
+.landscape-track svg{display:block;flex:0 0 50%;width:50%;height:100%;image-rendering:pixelated}
+.landscape-track.moving{animation:landscape-run 3s cubic-bezier(.35,.05,.35,1) forwards}
+.platform-scene{position:absolute;inset:0;pointer-events:none}
+.platform-scene[hidden],.route-status[hidden]{display:none!important}
+.platform-edge{position:absolute;left:0;right:0;bottom:0;height:6px;background:repeating-linear-gradient(90deg,#d8c98e 0 9px,#f5efcf 9px 18px);border-top:2px solid #847a61}
+.platform-post{position:absolute;bottom:5px;width:5px;height:29px;background:#8b9180;box-shadow:3px 0 #d5d0b9}
+.post-a{left:15%}.post-b{left:48%}.post-c{left:78%}
+.station-board{position:absolute;right:5px;top:3px;min-width:63px;padding:1px 5px;border:2px solid #526d56;border-radius:3px;background:#fff7df;color:#3f5a47;box-shadow:2px 2px 0 #405447;font-family:'DotGothic16',sans-serif;text-align:center;line-height:1.2}
+.station-board small{display:block;font-size:6px;color:#8f7045}.station-board b{display:block;font-size:9px;white-space:nowrap}
+.outside-caption{position:absolute;left:5px;top:3px;padding:1px 4px;background:#fff7dfd9;color:#566b58;font:7px 'DotGothic16',sans-serif}
+.route-status{position:absolute;left:50%;top:4px;transform:translateX(-50%);padding:3px 8px;border:2px solid #516a53;border-radius:3px;background:#fff7df;color:#435c48;box-shadow:2px 2px 0 #425348;font:9px 'DotGothic16',sans-serif;white-space:nowrap}
+body.is-traveling .game,body.is-traveling .sound{pointer-events:none}
+body.is-traveling .platform-scene,body.is-traveling .outside-caption{display:none}
+body.is-traveling .car-shell{animation:train-suspension .2s ease-in-out infinite}
+@keyframes landscape-run{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes train-suspension{0%,100%{transform:translateY(0)}50%{transform:translateY(2px)}}
+@media(max-width:640px){
+  .outside{top:4px;height:37px;left:2%;right:2%}
+  .station-board{right:3px;top:2px;min-width:48px;padding:1px 3px;border-width:1px}
+  .station-board small{font-size:5px}.station-board b{font-size:7px}
+  .outside-caption{left:3px;top:2px;font-size:6px}
+  .route-status{top:2px;padding:2px 5px;font-size:7px}
+  .platform-post{height:21px;width:4px}
+  .platform-edge{height:5px}
+}
+@media(prefers-reduced-motion:reduce){.landscape-track.moving,.is-traveling .car-shell{animation-duration:3s}}
