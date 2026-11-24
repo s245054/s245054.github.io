@@ -127,3 +127,19 @@ body{background-color:#d8dfbd;background-image:linear-gradient(90deg,#cbd5b0 1px
   .toast{min-height:18px;margin-top:4px;font-size:10px;line-height:1.3}
   .footer{margin:10px 0;font-size:9px}
 }
+
+
+/* STAGE 1 tutorial spotlight and pixel style step bubble */
+.tutorial-layer{position:fixed;inset:0;z-index:1000;pointer-events:none}
+.tutorial-layer[hidden]{display:none}
+.tutorial-dim{position:absolute;inset:0;background:rgba(28,35,34,.58);pointer-events:none}
+.tutorial-bubble{position:fixed;width:min(420px,calc(100vw - 28px));padding:14px 16px;border:3px solid #4f5f50;border-radius:8px;background:#fff4cf;color:#435043;box-shadow:5px 5px 0 #475544,0 8px 28px #18211c55;pointer-events:auto;text-align:center;font-family:'DotGothic16','Zen Maru Gothic',sans-serif}
+.tutorial-bubble:after{content:'';position:absolute;left:50%;bottom:-10px;width:14px;height:14px;background:#fff4cf;border-right:3px solid #4f5f50;border-bottom:3px solid #4f5f50;transform:translateX(-50%) rotate(45deg)}
+.tutorial-bubble strong{display:inline-block;margin-bottom:5px;padding:2px 9px;border-radius:4px;background:#789573;color:#fff}
+.tutorial-bubble p{margin:2px 0 10px;font-size:14px;line-height:1.55}
+.tutorial-bubble button{border:2px solid #8e866a;border-radius:5px;padding:6px 12px;background:#f8e7b5;color:#4f5144;font:700 12px 'Zen Maru Gothic',sans-serif;cursor:pointer}
+.tutorial-spotlight{position:relative!important;z-index:1001!important;outline:3px solid #ffd36e!important;outline-offset:4px;box-shadow:0 0 0 7px #ffd36e44,0 0 22px 8px #fff1bd99!important;animation:tutorial-spotlight-pulse 1.1s ease-in-out infinite}
+.carryover-note{display:block;margin-top:8px;font-size:12px;color:#77705d}
+@keyframes tutorial-spotlight-pulse{50%{outline-color:#fff1b5;box-shadow:0 0 0 10px #ffd36e55,0 0 26px 10px #fff1bdcc!important}}
+@media(max-width:640px){.tutorial-bubble{padding:11px 10px}.tutorial-bubble p{font-size:12px}}
+@media(prefers-reduced-motion:reduce){.tutorial-spotlight{animation:none}}
