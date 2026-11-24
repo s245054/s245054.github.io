@@ -145,3 +145,11 @@ body{background-color:#d8dfbd;background-image:linear-gradient(90deg,#cbd5b0 1px
 @media(prefers-reduced-motion:reduce){.tutorial-spotlight{animation:none}}
 
 .seat-hint{position:relative;z-index:0}
+
+/* 車両ガイド中は個々の席番号・位置タグを目立たせない */
+.car-shell.tutorial-spotlight .seat .num,
+.car-shell.tutorial-spotlight .seat .zone-tag{
+  opacity:.28!important;
+  filter:grayscale(1)!important;
+  text-shadow:none!important;
+}
