@@ -87,22 +87,9 @@ function areNeighbors(a,b){
 
 function positionTutorialBubble(){
   const bubble=document.getElementById('tutorialBubble');
-  const frame=document.getElementById('tutorialFrame');
   const target=document.querySelector('.tutorial-spotlight');
-  if(!target){
-    if(frame)frame.hidden=true;
-    return;
-  }
+  if(!target)return;
   const rect=target.getBoundingClientRect();
-  if(frame&&target.matches('.car-shell')){
-    frame.hidden=false;
-    frame.style.left=rect.left+'px';
-    frame.style.top=rect.top+'px';
-    frame.style.width=rect.width+'px';
-    frame.style.height=rect.height+'px';
-  }else if(frame){
-    frame.hidden=true;
-  }
   if(!bubble||bubble.hidden)return;
   const width=Math.min(420,window.innerWidth-28);
   const bubbleHeight=bubble.offsetHeight||106;
@@ -117,14 +104,12 @@ window.addEventListener('resize',positionTutorialBubble);
 function updateTutorial(){
   const layer=document.getElementById('tutorialLayer');
   const bubble=document.getElementById('tutorialBubble');
-  const frame=document.getElementById('tutorialFrame');
   const stepLabel=document.getElementById('tutorialStep');
   const message=document.getElementById('tutorialMessage');
   document.querySelectorAll('.tutorial-spotlight').forEach(el=>el.classList.remove('tutorial-spotlight'));
   if(stage!==0||tutorialDismissed){
     layer.hidden=true;
     bubble.hidden=true;
-    frame.hidden=true;
     tutorialCurrentStep=null;
     tutorialCurrentTarget=null;
     return;
