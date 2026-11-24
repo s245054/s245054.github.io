@@ -216,6 +216,20 @@ function drawStationView(){
   document.getElementById('routeStatus').hidden=true;
 }
 
+function syncLandscapeFrame(){
+  const viewport=document.querySelector('.outside');
+  const landscapeWindow=document.querySelector('.landscape-window');
+  const vehicle=document.querySelector('.car');
+  if(!viewport||!landscapeWindow||!vehicle)return;
+  const viewportRect=viewport.getBoundingClientRect();
+  const vehicleRect=vehicle.getBoundingClientRect();
+  landscapeWindow.style.left=(vehicleRect.left-viewportRect.left)+'px';
+  landscapeWindow.style.right='auto';
+  landscapeWindow.style.width=vehicleRect.width+'px';
+}
+window.addEventListener('resize',syncLandscapeFrame);
+
+
 function render(){
   const [title,desc,goal]=stages[stage];
   const ids=passengerIds();
@@ -226,6 +240,7 @@ function render(){
   const nextStage=stages[stage+1];
   document.getElementById('nextStation').textContent=nextStage?`次は：${nextStage[0]}`:'終点です（企救丘駅）';
   drawStationView();
+  syncLandscapeFrame();
   document.getElementById('goal').textContent='目標：'+goal;
   document.getElementById('totalScore').textContent=total;
   document.getElementById('progress').innerHTML=stages.map((_,i)=>`<i class="pip ${i<stage?'done':''}"></i>`).join('');
