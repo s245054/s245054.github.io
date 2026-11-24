@@ -365,6 +365,9 @@ function startJourney(){
   updateTutorial();
   document.getElementById('result').classList.remove('show');
   document.body.classList.add('is-traveling');
+  document.querySelector('.scene').classList.add('is-running');
+  document.querySelector('.car-shell').classList.add('is-running');
+  document.querySelector('.car').classList.add('is-running');
   document.getElementById('routeStatus').textContent=from+' ➔ '+to+' 走行中…';
   document.getElementById('routeStatus').hidden=false;
   document.getElementById('platformScene').hidden=true;
@@ -380,6 +383,9 @@ function startJourney(){
     selected=null;
     isTraveling=false;
     document.body.classList.remove('is-traveling');
+    document.querySelector('.scene').classList.remove('is-running');
+    document.querySelector('.car-shell').classList.remove('is-running');
+    document.querySelector('.car').classList.remove('is-running');
     render();
   },3000);
 }
