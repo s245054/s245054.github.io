@@ -56,7 +56,7 @@ const stages=[
   ['企救丘駅','終点まであと少し！全員の希望を100%かなえよう。','満足度 100%達成',4,4]
 ];
 
-let stage=0,total=0,assigned={},lockedAssigned={},selected=null;
+let stage=0,total=0,assigned={},lockedAssigned={},selected=null,tutorialDismissed=false,tutorialCurrentStep=null;
 function passengerIds(){return stagePassengers[stage]}
 const friendOf={6:7,7:6,10:11,11:10};
 const slotData=[...Array.from({length:14},(_,id)=>({id,type:'seat',side:id<7?'north':'south',isNearDriver:[5,6].includes(id%7)})),...Array.from({length:4},(_,i)=>({id:14+i,type:'strap',side:'center',isNearDriver:i===3}))];
@@ -84,6 +84,60 @@ function areNeighbors(a,b){
   let groupA=posA<=1?0:posA<=4?1:2,groupB=posB<=1?0:posB<=4?1:2;
   return bankA===bankB&&groupA===groupB&&Math.abs(posA-posB)===1;
 }
+
+function positionTutorialBubble(){
+  const bubble=document.getElementById('tutorialBubble');
+  const target=document.querySelector('.tutorial-spotlight');
+  if(!bubble||bubble.hidden||!target)return;
+  const rect=target.getBoundingClientRect();
+  const width=Math.min(420,window.innerWidth-28);
+  const bubbleHeight=bubble.offsetHeight||106;
+  const left=Math.max(14,Math.min(window.innerWidth-width-14,rect.left+(rect.width-width)/2));
+  const top=Math.max(10,Math.min(window.innerHeight-bubbleHeight-10,rect.top-bubbleHeight-12));
+  bubble.style.left=left+'px';
+  bubble.style.top=top+'px';
+}
+window.addEventListener('scroll',positionTutorialBubble,{passive:true});
+window.addEventListener('resize',positionTutorialBubble);
+
+function updateTutorial(){
+  const layer=document.getElementById('tutorialLayer');
+  const bubble=document.getElementById('tutorialBubble');
+  const stepLabel=document.getElementById('tutorialStep');
+  const message=document.getElementById('tutorialMessage');
+  document.querySelectorAll('.tutorial-spotlight').forEach(el=>el.classList.remove('tutorial-spotlight'));
+  if(stage!==0||tutorialDismissed){
+    layer.hidden=true;
+    bubble.hidden=true;
+    tutorialCurrentStep=null;
+    return;
+  }
+  const ids=passengerIds();
+  const allAssigned=Object.keys(assigned).length>=ids.length;
+  const step=allAssigned?3:selected!==null?2:1;
+  const target=step===1?document.getElementById('passengers'):step===2?document.querySelector('.scene'):document.getElementById('next');
+  const labels={1:'STEP 1/3',2:'STEP 2/3',3:'STEP 3/3'};
+  const messages={
+    1:'乗客カードをタップして選ぼう！',
+    2:'希望を見て、席か吊り革をタップしよう！',
+    3:'全員そろったよ！『採点する』を押そう！'
+  };
+  stepLabel.textContent=labels[step];
+  message.textContent=messages[step];
+  layer.hidden=false;
+  bubble.hidden=false;
+  target.classList.add('tutorial-spotlight');
+  if(tutorialCurrentStep!==step){
+    target.scrollIntoView({block:'center',behavior:'smooth'});
+    tutorialCurrentStep=step;
+  }
+  positionTutorialBubble();
+}
+
+document.getElementById('tutorialClose').onclick=()=>{
+  tutorialDismissed=true;
+  updateTutorial();
+};
 
 function render(){
   const [title,desc,goal]=stages[stage];
@@ -146,6 +200,7 @@ function render(){
   document.getElementById('next').disabled=Object.keys(assigned).length<count;
   const lockedCount=Object.keys(lockedAssigned).length;
   document.getElementById('toast').textContent=Object.keys(assigned).length===count?'全員そろったよ！「採点する」を押してね。':(lockedCount>0?`前の駅から ${lockedCount}人 が乗車中だよ（次の駅で降ります）`:'');
+  updateTutorial();
 }
 
 function seatClick(i){
@@ -196,6 +251,7 @@ function score(){
   document.getElementById('resultStars').textContent=points===100?'★★★':points>=60?'★★☆':'★☆☆';
   document.getElementById('resultTitle').textContent=isFinal?'13駅を完走！':points===100?'100%達成！完璧な案内！':points>=60?'いい感じの旅！':'次はもっといい旅に';
   document.getElementById('resultText').innerHTML=isFinal?`全13ステージおつかれさま！<br>最終ステージの満足度は <b>${points}%</b>。<br>合計ポイント<br><strong class="final-score">${total} / ${stages.length*100} pt</strong><br>モノレールの旅を楽しんでくれてありがとう。`:`今回の満足度は <b>${points}%</b>！<br>乗客さんの希望を ${satisfied} / ${ids.length} 人かなえたよ。<br>（今回乗ったお客さんは次の駅まで乗っています）`;
+  if(stage===0){document.getElementById('resultText').innerHTML+='<span class="carryover-note">※配置した乗客は次の駅までそのまま乗り続けます</span>';}
   document.getElementById('resultFeedback').innerHTML=outcomes.map(({id,pref,met})=>`<div class="feedback-row ${met?'feedback-ok':'feedback-miss'}"><b>${met?'✓ 達成':'・未達'} ${names[id]}</b>：${pref.text}</div>`).join('');
   document.getElementById('resultIcon').textContent=isFinal?'🎉🚝':points===100?'🌟🚝':'🚝';
   document.getElementById('resultNext').textContent=isFinal?'もう一度遊ぶ ↺':'つぎの駅へ →';
@@ -207,7 +263,7 @@ document.getElementById('reset').onclick=()=>{assigned={};selected=null;render()
 document.getElementById('resultNext').onclick=()=>{
   document.getElementById('result').classList.remove('show');
   if(stage===12){
-    stage=0;total=0;lockedAssigned={};
+    stage=0;total=0;lockedAssigned={};tutorialDismissed=false;tutorialCurrentStep=null;
   }else{
     lockedAssigned={...assigned};
     stage++;
