@@ -56,7 +56,7 @@ const stages=[
   ['企救丘駅','終点まであと少し！全員の希望を100%かなえよう。','満足度 100%達成',4,4]
 ];
 
-let stage=0,total=0,assigned={},lockedAssigned={},selected=null,tutorialDismissed=false,tutorialCurrentStep=null;
+let stage=0,total=0,assigned={},lockedAssigned={},selected=null,tutorialDismissed=false,tutorialCurrentStep=null,tutorialCurrentTarget=null;
 function passengerIds(){return stagePassengers[stage]}
 const friendOf={6:7,7:6,10:11,11:10};
 const slotData=[...Array.from({length:14},(_,id)=>({id,type:'seat',side:id<7?'north':'south',isNearDriver:[5,6].includes(id%7)})),...Array.from({length:4},(_,i)=>({id:14+i,type:'strap',side:'center',isNearDriver:i===3}))];
@@ -110,26 +110,42 @@ function updateTutorial(){
     layer.hidden=true;
     bubble.hidden=true;
     tutorialCurrentStep=null;
+    tutorialCurrentTarget=null;
     return;
   }
   const ids=passengerIds();
-  const allAssigned=Object.keys(assigned).length>=ids.length;
-  const step=allAssigned?3:selected!==null?2:1;
-  const target=step===1?document.getElementById('passengers'):step===2?document.querySelector('.scene'):document.getElementById('next');
-  const labels={1:'STEP 1/3',2:'STEP 2/3',3:'STEP 3/3'};
-  const messages={
-    1:'乗客カードをタップして選ぼう！',
-    2:'希望を見て、席か吊り革をタップしよう！',
-    3:'全員そろったよ！『採点する』を押そう！'
-  };
-  stepLabel.textContent=labels[step];
-  message.textContent=messages[step];
+  const assignedCount=Object.keys(assigned).length;
+  let step,target,instruction;
+  if(assignedCount>=ids.length){
+    step=4;
+    target=document.getElementById('next');
+    instruction='全員そろったよ！『採点する』を押そう！';
+  }else if(assignedCount===0&&selected===null){
+    step=1;
+    target=document.getElementById('passengers');
+    instruction='まずは1人目の乗客をタップして選ぼう！';
+  }else if(assignedCount===0){
+    step=2;
+    target=document.querySelector('.scene');
+    instruction='希望を見て、車内の席か吊り革をタップしよう！';
+  }else if(selected===null){
+    step=3;
+    target=document.getElementById('passengers');
+    instruction='いい調子！もう1人の乗客も同じように配置しよう！';
+  }else{
+    step=3;
+    target=document.querySelector('.scene');
+    instruction='もう1人の希望に合わせて席か吊り革をタップしよう！';
+  }
+  stepLabel.textContent='STEP '+step+'/4：';
+  message.textContent=instruction;
   layer.hidden=false;
   bubble.hidden=false;
   target.classList.add('tutorial-spotlight');
-  if(tutorialCurrentStep!==step){
+  if(tutorialCurrentStep!==step||tutorialCurrentTarget!==target){
     target.scrollIntoView({block:'center',behavior:'smooth'});
     tutorialCurrentStep=step;
+    tutorialCurrentTarget=target;
   }
   positionTutorialBubble();
 }
@@ -263,7 +279,7 @@ document.getElementById('reset').onclick=()=>{assigned={};selected=null;render()
 document.getElementById('resultNext').onclick=()=>{
   document.getElementById('result').classList.remove('show');
   if(stage===12){
-    stage=0;total=0;lockedAssigned={};tutorialDismissed=false;tutorialCurrentStep=null;
+    stage=0;total=0;lockedAssigned={};tutorialDismissed=false;tutorialCurrentStep=null;tutorialCurrentTarget=null;
   }else{
     lockedAssigned={...assigned};
     stage++;
