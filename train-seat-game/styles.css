@@ -159,3 +159,7 @@ body{background-color:#d8dfbd;background-image:linear-gradient(90deg,#cbd5b0 1px
 @keyframes tutorial-frame-pulse{50%{border-color:#fff1b5;box-shadow:inset 0 0 0 4px #ffd36e66,0 0 22px 7px #fff1bdcc}}
 @media(prefers-reduced-motion:reduce){.tutorial-frame{animation:none}}
 
+
+.station-heading{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.next-station{display:inline-flex;align-items:center;white-space:nowrap;padding:3px 7px;border:1px solid #a9b784;border-radius:4px;background:#eff3d6;color:#536746;box-shadow:inset 0 0 0 1px #ffffffb0;font:10px 'DotGothic16',sans-serif;line-height:1.4}
+@media(max-width:640px){.station-heading{gap:5px}.next-station{padding:2px 5px;font-size:8px}}
