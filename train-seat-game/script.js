@@ -126,7 +126,7 @@ function updateTutorial(){
     instruction='まずは1人目の乗客をタップして選ぼう！';
   }else if(assignedCount===0){
     step=2;
-    target=document.querySelector('.scene');
+    target=document.querySelector('.car-shell');
     instruction='希望を見て、車内の席か吊り革をタップしよう！';
   }else if(selected===null){
     step=3;
@@ -134,7 +134,7 @@ function updateTutorial(){
     instruction='いい調子！もう1人の乗客も同じように配置しよう！';
   }else{
     step=3;
-    target=document.querySelector('.scene');
+    target=document.querySelector('.car-shell');
     instruction='もう1人の希望に合わせて席か吊り革をタップしよう！';
   }
   stepLabel.textContent='STEP '+step+'/4：';
