@@ -178,6 +178,8 @@ function render(){
   document.getElementById('stageLabel').textContent=`STAGE ${stage+1} / 13`;
   document.getElementById('stageTitle').textContent=title;
   document.getElementById('stageDesc').textContent=desc;
+  const nextStage=stages[stage+1];
+  document.getElementById('nextStation').textContent=nextStage?`次は：${nextStage[0]}`:'終点です（企救丘駅）';
   document.getElementById('goal').textContent='目標：'+goal;
   document.getElementById('totalScore').textContent=total;
   document.getElementById('progress').innerHTML=stages.map((_,i)=>`<i class="pip ${i<stage?'done':''}"></i>`).join('');
