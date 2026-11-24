@@ -56,7 +56,7 @@ const stages=[
   ['企救丘駅','終点まであと少し！全員の希望を100%かなえよう。','満足度 100%達成',4,4]
 ];
 
-let stage=0,total=0,assigned={},lockedAssigned={},selected=null,tutorialDismissed=false,tutorialCurrentStep=null,tutorialCurrentTarget=null;
+let stage=0,total=0,assigned={},lockedAssigned={},selected=null,tutorialDismissed=false,tutorialCurrentStep=null,tutorialCurrentTarget=null,isTraveling=false;
 function passengerIds(){return stagePassengers[stage]}
 const friendOf={6:7,7:6,10:11,11:10};
 const slotData=[...Array.from({length:14},(_,id)=>({id,type:'seat',side:id<7?'north':'south',isNearDriver:[5,6].includes(id%7)})),...Array.from({length:4},(_,i)=>({id:14+i,type:'strap',side:'center',isNearDriver:i===3}))];
@@ -171,6 +171,66 @@ document.getElementById('tutorialClose').onclick=()=>{
   updateTutorial();
 };
 
+const landscapeThemes=[
+  {kind:'downtown',sky:'#bce6f0',ground:'#d8e5b0',palette:['#879eb2','#b9c4c7','#cf8f72']},
+  {kind:'river',sky:'#c5e9ed',ground:'#cfdfab',palette:['#9cadb0','#c5aa7c','#d2c19a']},
+  {kind:'road',sky:'#bde5ef',ground:'#c8d7a2',palette:['#a5b4b4','#d0cbbb','#8c9ca5']},
+  {kind:'shops',sky:'#c5e9ec',ground:'#d6dfa9',palette:['#c49a7a','#9eafa6','#b6a57e']},
+  {kind:'school',sky:'#c6e9ef',ground:'#bdd397',palette:['#d4c8a9','#8da3a3','#b89d78']},
+  {kind:'open',sky:'#b8e4ef',ground:'#b6d391',palette:['#c8bd9b','#a8b7aa','#cfb27c']},
+  {kind:'campus',sky:'#b8e4f0',ground:'#b5d394',palette:['#d1c7a5','#b9b29a','#849d8d']},
+  {kind:'race',sky:'#bce7ef',ground:'#c0d49a',palette:['#c4c5b2','#b59d83','#a1b6ae']},
+  {kind:'housing',sky:'#c3e8ed',ground:'#b9d294',palette:['#e6e4d7','#c9d0c7','#dad8ca']},
+  {kind:'housingHills',sky:'#b8e3ef',ground:'#b5d18f',palette:['#e0ded2','#c7d0c4','#c6bca1']},
+  {kind:'riverHills',sky:'#b7e1eb',ground:'#aeca86',palette:['#c8c7b7','#b8aa91','#95a99c']},
+  {kind:'base',sky:'#b9e2eb',ground:'#9dbc78',palette:['#c8c6b3','#aab4a5','#969d8b']}
+];
+function landscapeSvg(index){
+  const theme=landscapeThemes[Math.max(0,Math.min(11,index))];
+  const parts=['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 90" preserveAspectRatio="none" aria-hidden="true">'];
+  parts.push('<rect width="600" height="90" fill="'+theme.sky+'"/><rect y="62" width="600" height="28" fill="'+theme.ground+'"/>');
+  if(['housingHills','riverHills','base'].includes(theme.kind)){
+    parts.push('<path d="M0 58L60 38L108 54L174 29L242 56L318 33L386 57L454 30L524 55L600 34V70H0Z" fill="#779b71"/><path d="M0 62L80 45L145 64L238 41L304 64L390 43L470 62L550 42L600 53V72H0Z" fill="#9cba81"/>');
+  }
+  if(['river','riverHills'].includes(theme.kind))parts.push('<rect y="65" width="600" height="16" fill="#71bdca"/><path d="M0 70H600M0 77H600" stroke="#b7e4dd" stroke-width="2"/><path d="M90 65V54H500V65M120 54Q295 31 470 54" fill="none" stroke="#8e8775" stroke-width="5"/>');
+  if(theme.kind==='road')parts.push('<rect y="68" width="600" height="20" fill="#747b72"/><path d="M0 78H600" stroke="#f5e8b5" stroke-width="2" stroke-dasharray="18 14"/>');
+  const count=theme.kind==='open'?5:theme.kind.startsWith('housing')?9:7;
+  for(let i=0;i<count;i++){
+    const x=8+i*(580/count),h=theme.kind==='downtown'?(36+(i*17)%42):theme.kind.startsWith('housing')?34+(i*7)%17:24+(i*13)%30,w=theme.kind.startsWith('housing')?46:50+(i%2)*10;
+    const y=(theme.kind==='road'?68:theme.kind==='river'||theme.kind==='riverHills'?64:66)-h,fill=theme.palette[i%theme.palette.length];
+    parts.push('<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" fill="'+fill+'" stroke="#657e79" stroke-width="1"/>');
+    if(theme.kind==='downtown'&&i%3===0)parts.push('<rect x="'+(x+w/2-5)+'" y="'+(y-5)+'" width="10" height="5" fill="#778d98"/>');
+    for(let row=0;row<Math.floor(h/10);row++)for(let col=0;col<3;col++)parts.push('<rect x="'+(x+7+col*12)+'" y="'+(y+6+row*9)+'" width="5" height="4" fill="#eaf1d7"/>');
+    if(['shops','downtown','river'].includes(theme.kind))parts.push('<rect x="'+x+'" y="66" width="'+w+'" height="5" fill="'+(i%2?'#cf856e':'#e5bb70')+'"/>');
+  }
+  if(theme.kind==='downtown')parts.push('<path d="M0 65H600" stroke="#7a7163" stroke-width="4"/><path d="M24 48H180M185 48H280" stroke="#d86654" stroke-width="3"/>');
+  if(['school','campus'].includes(theme.kind)){
+    const x=theme.kind==='school'?250:235;
+    parts.push('<rect x="'+x+'" y="33" width="124" height="34" fill="#e2d7ba" stroke="#71877c" stroke-width="2"/><path d="M'+(x-8)+' 34L'+(x+62)+' 18L'+(x+132)+' 34Z" fill="#a96859"/>');
+    for(let w=x+10;w<x+115;w+=18)parts.push('<rect x="'+w+'" y="42" width="9" height="11" fill="#9bc6ca"/>');
+    parts.push('<rect x="'+(x+54)+'" y="52" width="16" height="15" fill="#8a795e"/>');
+  }
+  if(theme.kind==='race'){
+    parts.push('<path d="M175 62L195 35H474L506 62Z" fill="#9b9990" stroke="#657570" stroke-width="2"/><path d="M195 35L230 25H450L474 35" fill="none" stroke="#667b79" stroke-width="5"/>');
+    for(let x=210;x<480;x+=24)parts.push('<rect x="'+x+'" y="42" width="12" height="13" fill="#e7e2c9"/>');
+  }
+  if(['open','school','campus','riverHills'].includes(theme.kind)){
+    for(let x=35;x<600;x+=105)parts.push('<rect x="'+x+'" y="51" width="5" height="17" fill="#7c705d"/><rect x="'+(x-8)+'" y="42" width="21" height="12" fill="#63936f"/><rect x="'+(x-4)+'" y="35" width="13" height="9" fill="#76a17a"/>');
+  }
+  if(theme.kind==='base')parts.push('<rect y="73" width="600" height="17" fill="#8e927f"/><path d="M0 76H600M0 86H600M90 72L130 90M270 72L310 90M450 72L490 90" stroke="#555e57" stroke-width="3"/><path d="M40 72L95 62M140 72L195 62M260 72L315 62M380 72L435 62" stroke="#72796c" stroke-width="2"/>');
+  parts.push('</svg>');
+  return parts.join('');
+}
+function drawStationView(){
+  const routeIndex=stage===0?0:Math.min(11,stage-1);
+  const track=document.getElementById('landscapeTrack');
+  track.classList.remove('moving');
+  track.innerHTML=landscapeSvg(routeIndex)+landscapeSvg(routeIndex);
+  document.getElementById('outsideStation').textContent=stages[stage][0];
+  document.getElementById('platformScene').hidden=false;
+  document.getElementById('routeStatus').hidden=true;
+}
+
 function render(){
   const [title,desc,goal]=stages[stage];
   const ids=passengerIds();
@@ -180,6 +240,7 @@ function render(){
   document.getElementById('stageDesc').textContent=desc;
   const nextStage=stages[stage+1];
   document.getElementById('nextStation').textContent=nextStage?`次は：${nextStage[0]}`:'終点です（企救丘駅）';
+  drawStationView();
   document.getElementById('goal').textContent='目標：'+goal;
   document.getElementById('totalScore').textContent=total;
   document.getElementById('progress').innerHTML=stages.map((_,i)=>`<i class="pip ${i<stage?'done':''}"></i>`).join('');
@@ -294,15 +355,45 @@ function score(){
 
 document.getElementById('next').onclick=score;
 document.getElementById('reset').onclick=()=>{assigned={};selected=null;render()};
-document.getElementById('resultNext').onclick=()=>{
+function startJourney(){
+  if(isTraveling||stage>=stages.length-1)return;
+  const routeIndex=stage;
+  const from=stages[stage][0].replace(/駅$/,'');
+  const to=stages[stage+1][0].replace(/駅$/,'');
+  isTraveling=true;
+  tutorialDismissed=true;
+  updateTutorial();
   document.getElementById('result').classList.remove('show');
-  if(stage===12){
-    stage=0;total=0;lockedAssigned={};tutorialDismissed=false;tutorialCurrentStep=null;tutorialCurrentTarget=null;
-  }else{
+  document.body.classList.add('is-traveling');
+  document.getElementById('routeStatus').textContent=from+' ➔ '+to+' 走行中…';
+  document.getElementById('routeStatus').hidden=false;
+  document.getElementById('platformScene').hidden=true;
+  const track=document.getElementById('landscapeTrack');
+  track.innerHTML=landscapeSvg(routeIndex)+landscapeSvg(routeIndex);
+  track.classList.remove('moving');
+  void track.offsetWidth;
+  track.classList.add('moving');
+  window.setTimeout(()=>{
     lockedAssigned={...assigned};
     stage++;
+    assigned={};
+    selected=null;
+    isTraveling=false;
+    document.body.classList.remove('is-traveling');
+    render();
+  },3000);
+}
+
+document.getElementById('resultNext').onclick=()=>{
+  if(isTraveling)return;
+  if(stage===stages.length-1){
+    document.getElementById('result').classList.remove('show');
+    stage=0;total=0;lockedAssigned={};tutorialDismissed=false;tutorialCurrentStep=null;tutorialCurrentTarget=null;
+    assigned={};selected=null;render();
+    return;
   }
-  assigned={};selected=null;render();
+  startJourney();
 };
+
 document.getElementById('sound').onclick=e=>{e.currentTarget.textContent=e.currentTarget.textContent.includes('運行中')?'♪ しずかな車内':'♪ モノレール運行中'};
 render();
