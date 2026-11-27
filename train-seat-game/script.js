@@ -194,6 +194,10 @@ function landscapeSvg(index){
 
   add('<rect width="600" height="90" fill="'+sky+'"/>');
   add('<rect y="62" width="600" height="28" fill="'+ground+'"/>');
+  if(index>=10){
+    add('<path d="M0 62C34 62 44 60 72 56C114 49 147 37 184 37C228 37 247 50 285 53C323 56 349 47 382 41C418 35 450 38 480 49C516 60 548 62 600 62Z" fill="#739974"/>');
+    add('<path d="M0 62C42 62 63 60 100 57C140 54 165 45 202 46C244 47 258 58 300 59C348 60 371 51 412 48C454 45 488 57 520 60C548 62 572 62 600 62Z" fill="#91b77b"/>');
+  }
 
   if(['housingHills','riverHills','base'].includes(kind)){
     add('<path d="M0 62L58 42L115 60L180 34L245 62L315 38L382 62L455 33L520 60L600 62V90H0Z" fill="#789d72"/>');
@@ -337,7 +341,7 @@ function landscapeSvg(index){
 }
 
 function drawStationView(){
-  const fromIndex=stage===0?0:Math.min(11,stage-1);
+  const fromIndex=Math.max(0,Math.min(11,stage));
   const track=document.getElementById('landscapeTrack');
   track.classList.remove('moving');
   track.innerHTML=landscapeSvg(fromIndex)+landscapeSvg(fromIndex);
@@ -473,8 +477,8 @@ document.getElementById('next').onclick=score;
 document.getElementById('reset').onclick=()=>{assigned={};selected=null;render()};
 function startJourney(){
   if(isTraveling||stage>=stages.length-1)return;
-  const fromIndex=stage===0?0:Math.min(11,stage-1);
-  const toIndex=Math.max(0,Math.min(11,stage));
+  const fromIndex=Math.max(0,Math.min(11,stage));
+  const toIndex=Math.max(0,Math.min(11,stage+1));
   const from=stages[stage][0].replace(/駅$/,'');
   const to=stages[stage+1][0].replace(/駅$/,'');
   isTraveling=true;
