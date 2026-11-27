@@ -229,20 +229,41 @@ function landscapeSvg(index){
   }
 
   if(kind==='road'){
-    building(18,54,23,'#9faeac',66);
-    building(86,62,13,'#b9c4bf',66,true);
-    building(164,58,29,'#879da5',66);
-    building(236,66,19,'#d0c8ae',66);
-    building(316,56,10,'#aebcb7',66,true);
-    building(386,64,25,'#91a5a7',66);
-    building(464,54,17,'#c4bca3',66);
-    building(530,52,30,'#8fa3a7',66);
+    if(index===7){
+      building(18,54,23,'#9faeac',66);
+      building(86,62,13,'#b9c4bf',66,true);
+      building(464,54,17,'#c4bca3',66);
+      building(530,52,30,'#8fa3a7',66);
+      add('<rect x="185" y="35" width="260" height="27" fill="#d9d8c8" stroke="#657c74" stroke-width="2"/>');
+      add('<path d="M168 36L202 17H428L462 36Z" fill="#f4f1df" stroke="#657c74" stroke-width="2"/>');
+      add('<path d="M180 37H450" stroke="#fffdf3" stroke-width="3"/>');
+      add('<rect x="195" y="39" width="240" height="11" fill="#b9c9c1"/>');
+      for(let x=198;x<432;x+=18){
+        add('<rect x="'+x+'" y="41" width="11" height="7" fill="#93b9bd" stroke="#74877d" stroke-width="1"/>');
+        add('<rect x="'+(x+2)+'" y="43" width="3" height="3" fill="#e9f0dc"/>');
+      }
+      add('<path d="M190 52H440M190 58H440" stroke="#9ba795" stroke-width="2"/>');
+      add('<rect x="306" y="51" width="18" height="11" fill="#8f8064"/>');
+    }else{
+      building(18,54,23,'#9faeac',66);
+      building(86,62,13,'#b9c4bf',66,true);
+      building(164,58,29,'#879da5',66);
+      building(236,66,19,'#d0c8ae',66);
+      building(316,56,10,'#aebcb7',66,true);
+      building(386,64,25,'#91a5a7',66);
+      building(464,54,17,'#c4bca3',66);
+      building(530,52,30,'#8fa3a7',66);
+    }
     add('<rect y="64" width="600" height="26" fill="#71786f"/>');
     add('<rect y="64" width="600" height="4" fill="#d7d0b8"/>');
     add('<path d="M0 80H600" stroke="#f5e8b5" stroke-width="2" stroke-dasharray="20 14"/>');
     add('<path d="M0 88H600" stroke="#59635e" stroke-width="2"/>');
+    if(index===7){
+      add('<rect x="180" y="68" width="270" height="10" fill="#85b871"/>');
+      add('<path d="M180 69H450M180 77H450" stroke="#fff9e8" stroke-width="2"/>');
+      for(let x=184;x<450;x+=24)add('<rect x="'+x+'" y="67" width="3" height="12" fill="#f5f0dc"/>');
+    }
   }
-
   if(kind==='shops'){
     building(20,75,30,'#c7aa89');
     building(111,82,25,'#aeb9a5');
