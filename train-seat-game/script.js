@@ -172,7 +172,7 @@ const landscapeThemes=[
 ];
 
 function landscapeSvg(index){
-  const kind=landscapeThemes[Math.max(0,Math.min(11,index))].kind;
+  const kind=landscapeThemes[2].kind;
   const parts=['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 90" preserveAspectRatio="none" aria-hidden="true">'];
   const add=(s)=>parts.push(s);
   const tree=(x,base=62,scale=1,color='#63936f')=>{
