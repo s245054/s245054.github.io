@@ -193,8 +193,8 @@ function landscapeSvg(index){
   add('<rect y="62" width="600" height="28" fill="#c5d99d"/>');
 
   if(['housingHills','riverHills','base'].includes(kind)){
-    add('<path d="M0 62L58 42L115 60L180 34L245 62L315 38L382 62L455 33L520 60L600 39V90H0Z" fill="#789d72"/>');
-    add('<path d="M0 62L83 49L145 62L238 44L308 62L390 47L470 62L550 46L600 55V90H0Z" fill="#9cba80"/>');
+    add('<path d="M0 62L58 42L115 60L180 34L245 62L315 38L382 62L455 33L520 60L600 62V90H0Z" fill="#789d72"/>');
+    add('<path d="M0 62L83 49L145 62L238 44L308 62L390 47L470 62L550 46L600 62V90H0Z" fill="#9cba80"/>');
   }
 
   if(kind==='downtown'){
@@ -211,10 +211,10 @@ function landscapeSvg(index){
   }
 
   if(kind==='river'){
-    add('<path d="M0 45L90 41L155 47L245 39L330 45L420 40L505 46L600 41V62H0Z" fill="#9fbd7a"/>');
+    add('<path d="M0 62L90 49L155 56L245 44L330 55L420 48L505 57L600 62V90H0Z" fill="#9fbd7a"/>');
     add('<rect x="0" y="62" width="600" height="20" fill="#70b9c7"/>');
     add('<path d="M0 68H600M0 76H600" stroke="#a9dfe0" stroke-width="2" stroke-dasharray="15 9"/>');
-    for(let x=20;x<600;x+=72)tree(x,62,.8,x%144?'#60936d':'#77a477');
+    for(let x=24;x<570;x+=72)tree(x,62,.8,x%144?'#60936d':'#77a477');
     add('<path d="M0 58H600" stroke="#7b7969" stroke-width="4"/>');
     add('<path d="M0 61Q150 36 300 61T600 61" fill="none" stroke="#8e8774" stroke-width="5"/>');
     add('<path d="M0 53H600" stroke="#e6dfc6" stroke-width="2"/>');
