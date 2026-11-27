@@ -199,3 +199,12 @@ body.is-traveling .route-status{animation:route-status-pulse .75s ease-in-out in
   .station-board small{font-size:6px}.station-board b{font-size:9px}
   
 }
+
+/* .scene の内側幅へ沿線風景をぴったり合わせる */
+.scene{padding-left:0;padding-right:0}
+.outside{position:relative;left:0;right:0;width:100%;margin-left:0;margin-right:0;box-sizing:border-box}
+.landscape-window{left:0;right:0;width:auto}
+@media(max-width:640px){
+  .outside{left:0;right:0;width:100%;margin-left:0;margin-right:0}
+  .landscape-window{left:0;right:0;width:auto}
+}
