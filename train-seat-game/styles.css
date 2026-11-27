@@ -156,7 +156,7 @@ body{background-color:#d8dfbd;background-image:linear-gradient(90deg,#cbd5b0 1px
 
 /* 走行中に窓の外を流れるドット絵風の沿線景色 */
 .outside{top:7px;left:3%;right:3%;height:51px;text-align:left;font-size:9px;z-index:1;pointer-events:none}
-.landscape-window{position:absolute;inset:0;overflow:hidden;border:2px solid #4f7980;border-radius:4px;background:#bce6f0;box-shadow:inset 0 0 0 2px #e8f3df}
+.landscape-window{position:absolute;inset:0;width:100%;overflow:hidden;border:0;border-radius:0;background:#bce6f0;box-shadow:none}
 .landscape-track{position:absolute;inset:0 auto 0 0;width:200%;height:100%;display:flex;will-change:transform}
 .landscape-track svg{display:block;flex:0 0 50%;width:50%;height:100%;image-rendering:pixelated}
 .landscape-track.moving{animation:landscape-run 3s cubic-bezier(.35,.05,.35,1) forwards}
@@ -190,10 +190,11 @@ body.is-traveling .route-status{animation:route-status-pulse .75s ease-in-out in
 @media(prefers-reduced-motion:reduce){.landscape-track.moving,.is-traveling .car-shell{animation-duration:3s}}
 
 /* 車窓をカード幅いっぱいの停車・走行景色に */
-.outside{position:relative;top:auto;left:auto;right:auto;width:100%;height:clamp(125px,18vw,180px);margin:0 0 10px;text-align:left;z-index:1}
+.scene{padding-left:0;padding-right:0}
+.outside{position:relative;top:auto;left:auto;right:auto;width:100%;height:clamp(125px,18vw,180px);margin:0;text-align:left;z-index:1}
 .station-board{padding:3px 8px}.station-board small{font-size:8px}.station-board b{font-size:12px}
 @media(max-width:640px){
-  .outside{height:clamp(110px,31vw,135px);margin-bottom:7px}
+  .outside{height:clamp(110px,31vw,135px);margin:0}
   .station-board{right:4px;top:3px;min-width:58px;padding:2px 5px}
   .station-board small{font-size:6px}.station-board b{font-size:9px}
   
