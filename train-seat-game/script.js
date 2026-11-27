@@ -173,6 +173,9 @@ const landscapeThemes=[
 
 function landscapeSvg(index){
   const kind=landscapeThemes[2].kind;
+  const sceneColors=getComputedStyle(document.documentElement);
+  const sky=sceneColors.getPropertyValue('--scene-sky').trim()||'#bce6ef';
+  const ground=sceneColors.getPropertyValue('--scene-ground').trim()||'#c5d99d';
   const parts=['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 90" preserveAspectRatio="none" aria-hidden="true">'];
   const add=(s)=>parts.push(s);
   const tree=(x,base=62,scale=1,color='#63936f')=>{
@@ -189,8 +192,8 @@ function landscapeSvg(index){
     }
   };
 
-  add('<rect width="600" height="90" fill="#bce6ef"/>');
-  add('<rect y="62" width="600" height="28" fill="#c5d99d"/>');
+  add('<rect width="600" height="90" fill="'+sky+'"/>');
+  add('<rect y="62" width="600" height="28" fill="'+ground+'"/>');
 
   if(['housingHills','riverHills','base'].includes(kind)){
     add('<path d="M0 62L58 42L115 60L180 34L245 62L315 38L382 62L455 33L520 60L600 62V90H0Z" fill="#789d72"/>');
