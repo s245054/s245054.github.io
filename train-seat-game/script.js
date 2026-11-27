@@ -157,55 +157,182 @@ document.getElementById('tutorialClose').onclick=()=>{
 };
 
 const landscapeThemes=[
-  {kind:'downtown',sky:'#bce6f0',ground:'#d8e5b0',palette:['#879eb2','#b9c4c7','#cf8f72']},
-  {kind:'river',sky:'#c5e9ed',ground:'#cfdfab',palette:['#9cadb0','#c5aa7c','#d2c19a']},
-  {kind:'road',sky:'#bde5ef',ground:'#c8d7a2',palette:['#a5b4b4','#d0cbbb','#8c9ca5']},
-  {kind:'shops',sky:'#c5e9ec',ground:'#d6dfa9',palette:['#c49a7a','#9eafa6','#b6a57e']},
-  {kind:'school',sky:'#c6e9ef',ground:'#bdd397',palette:['#d4c8a9','#8da3a3','#b89d78']},
-  {kind:'open',sky:'#b8e4ef',ground:'#b6d391',palette:['#c8bd9b','#a8b7aa','#cfb27c']},
-  {kind:'campus',sky:'#b8e4f0',ground:'#b5d394',palette:['#d1c7a5','#b9b29a','#849d8d']},
-  {kind:'race',sky:'#bce7ef',ground:'#c0d49a',palette:['#c4c5b2','#b59d83','#a1b6ae']},
-  {kind:'housing',sky:'#c3e8ed',ground:'#b9d294',palette:['#e6e4d7','#c9d0c7','#dad8ca']},
-  {kind:'housingHills',sky:'#b8e3ef',ground:'#b5d18f',palette:['#e0ded2','#c7d0c4','#c6bca1']},
-  {kind:'riverHills',sky:'#b7e1eb',ground:'#aeca86',palette:['#c8c7b7','#b8aa91','#95a99c']},
-  {kind:'base',sky:'#b9e2eb',ground:'#9dbc78',palette:['#c8c6b3','#aab4a5','#969d8b']}
+  {kind:'downtown'},
+  {kind:'river'},
+  {kind:'road'},
+  {kind:'shops'},
+  {kind:'school'},
+  {kind:'open'},
+  {kind:'campus'},
+  {kind:'race'},
+  {kind:'housing'},
+  {kind:'housingHills'},
+  {kind:'riverHills'},
+  {kind:'base'}
 ];
+
 function landscapeSvg(index){
-  const theme=landscapeThemes[Math.max(0,Math.min(11,index))];
+  const kind=landscapeThemes[Math.max(0,Math.min(11,index))].kind;
   const parts=['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 90" preserveAspectRatio="none" aria-hidden="true">'];
-  parts.push('<rect width="600" height="90" fill="'+theme.sky+'"/><rect y="62" width="600" height="28" fill="'+theme.ground+'"/>');
-  if(['housingHills','riverHills','base'].includes(theme.kind)){
-    parts.push('<path d="M0 58L60 38L108 54L174 29L242 56L318 33L386 57L454 30L524 55L600 34V70H0Z" fill="#779b71"/><path d="M0 62L80 45L145 64L238 41L304 64L390 43L470 62L550 42L600 53V72H0Z" fill="#9cba81"/>');
+  const add=(s)=>parts.push(s);
+  const tree=(x,base=62,scale=1,color='#63936f')=>{
+    const trunkW=4*scale, trunkH=10*scale, crownW=20*scale, crownH=18*scale;
+    add('<rect x="'+(x-trunkW/2)+'" y="'+(base-trunkH)+'" width="'+trunkW+'" height="'+trunkH+'" fill="#806e55"/>');
+    add('<rect x="'+(x-crownW/2)+'" y="'+(base-trunkH-crownH)+'" width="'+crownW+'" height="'+crownH+'" fill="'+color+'"/>');
+    add('<rect x="'+(x-crownW/2+4*scale)+'" y="'+(base-trunkH-crownH-5*scale)+'" width="'+(crownW-8*scale)+'" height="'+(crownH*.45)+'" fill="#78a57b"/>');
+  };
+  const building=(x,w,top,color,base=62,apartment=false)=>{
+    add('<rect x="'+x+'" y="'+top+'" width="'+w+'" height="'+(base-top)+'" fill="'+color+'" stroke="#637d77" stroke-width="1"/>');
+    add('<rect x="'+(x+3)+'" y="'+(base-3)+'" width="'+(w-6)+'" height="3" fill="#7e8e79"/>');
+    for(let y=top+6;y<base-6;y+=8)for(let col=x+6;col<x+w-4;col+=apartment?11:13){
+      add('<rect x="'+col+'" y="'+y+'" width="'+(apartment?6:5)+'" height="4" fill="#e8f0d9"/>');
+    }
+  };
+
+  add('<rect width="600" height="90" fill="#bce6ef"/>');
+  add('<rect y="62" width="600" height="28" fill="#c5d99d"/>');
+
+  if(['housingHills','riverHills','base'].includes(kind)){
+    add('<path d="M0 62L58 42L115 60L180 34L245 62L315 38L382 62L455 33L520 60L600 39V90H0Z" fill="#789d72"/>');
+    add('<path d="M0 62L83 49L145 62L238 44L308 62L390 47L470 62L550 46L600 55V90H0Z" fill="#9cba80"/>');
   }
-  if(['river','riverHills'].includes(theme.kind))parts.push('<rect y="65" width="600" height="16" fill="#71bdca"/><path d="M0 70H600M0 77H600" stroke="#b7e4dd" stroke-width="2"/><path d="M90 65V54H500V65M120 54Q295 31 470 54" fill="none" stroke="#8e8775" stroke-width="5"/>');
-  if(theme.kind==='road')parts.push('<rect y="68" width="600" height="20" fill="#747b72"/><path d="M0 78H600" stroke="#f5e8b5" stroke-width="2" stroke-dasharray="18 14"/>');
-  const count=theme.kind==='open'?5:theme.kind.startsWith('housing')?9:7;
-  for(let i=0;i<count;i++){
-    const x=8+i*(580/count),h=theme.kind==='downtown'?(36+(i*17)%42):theme.kind.startsWith('housing')?34+(i*7)%17:24+(i*13)%30,w=theme.kind.startsWith('housing')?46:50+(i%2)*10;
-    const y=(theme.kind==='road'?68:theme.kind==='river'||theme.kind==='riverHills'?64:66)-h,fill=theme.palette[i%theme.palette.length];
-    parts.push('<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" fill="'+fill+'" stroke="#657e79" stroke-width="1"/>');
-    if(theme.kind==='downtown'&&i%3===0)parts.push('<rect x="'+(x+w/2-5)+'" y="'+(y-5)+'" width="10" height="5" fill="#778d98"/>');
-    for(let row=0;row<Math.floor(h/10);row++)for(let col=0;col<3;col++)parts.push('<rect x="'+(x+7+col*12)+'" y="'+(y+6+row*9)+'" width="5" height="4" fill="#eaf1d7"/>');
-    if(['shops','downtown','river'].includes(theme.kind))parts.push('<rect x="'+x+'" y="66" width="'+w+'" height="5" fill="'+(i%2?'#cf856e':'#e5bb70')+'"/>');
+
+  if(kind==='downtown'){
+    building(24,52,23,'#829baa');
+    building(92,62,13,'#a9b9bb');
+    building(170,52,31,'#8ea5ad');
+    building(238,60,9,'#d3c7a7');
+    building(314,56,18,'#9daeb0');
+    building(386,60,5,'#d0ad83');
+    building(462,58,22,'#91a5ad');
+    building(536,40,32,'#a6b4b1');
+    add('<path d="M18 49H168M181 49H293M308 49H434M450 49H582" stroke="#d88e69" stroke-width="4"/>');
+    add('<path d="M0 62H600" stroke="#8c806b" stroke-width="3"/>');
   }
-  if(theme.kind==='downtown')parts.push('<path d="M0 65H600" stroke="#7a7163" stroke-width="4"/>');
-  if(['school','campus'].includes(theme.kind)){
-    const x=theme.kind==='school'?250:235;
-    parts.push('<rect x="'+x+'" y="33" width="124" height="34" fill="#e2d7ba" stroke="#71877c" stroke-width="2"/><path d="M'+(x-8)+' 34L'+(x+62)+' 18L'+(x+132)+' 34Z" fill="#a96859"/>');
-    for(let w=x+10;w<x+115;w+=18)parts.push('<rect x="'+w+'" y="42" width="9" height="11" fill="#9bc6ca"/>');
-    parts.push('<rect x="'+(x+54)+'" y="52" width="16" height="15" fill="#8a795e"/>');
+
+  if(kind==='river'){
+    add('<path d="M0 45L90 41L155 47L245 39L330 45L420 40L505 46L600 41V62H0Z" fill="#9fbd7a"/>');
+    add('<rect x="0" y="62" width="600" height="20" fill="#70b9c7"/>');
+    add('<path d="M0 68H600M0 76H600" stroke="#a9dfe0" stroke-width="2" stroke-dasharray="15 9"/>');
+    for(let x=20;x<600;x+=72)tree(x,62,.8,x%144?'#60936d':'#77a477');
+    add('<path d="M0 58H600" stroke="#7b7969" stroke-width="4"/>');
+    add('<path d="M0 61Q150 36 300 61T600 61" fill="none" stroke="#8e8774" stroke-width="5"/>');
+    add('<path d="M0 53H600" stroke="#e6dfc6" stroke-width="2"/>');
+    for(let x=50;x<600;x+=125)add('<rect x="'+x+'" y="57" width="8" height="18" fill="#8e8774"/>');
   }
-  if(theme.kind==='race'){
-    parts.push('<path d="M175 62L195 35H474L506 62Z" fill="#9b9990" stroke="#657570" stroke-width="2"/><path d="M195 35L230 25H450L474 35" fill="none" stroke="#667b79" stroke-width="5"/>');
-    for(let x=210;x<480;x+=24)parts.push('<rect x="'+x+'" y="42" width="12" height="13" fill="#e7e2c9"/>');
+
+  if(kind==='road'){
+    building(18,54,23,'#9faeac',66);
+    building(86,62,13,'#b9c4bf',66,true);
+    building(164,58,29,'#879da5',66);
+    building(236,66,19,'#d0c8ae',66);
+    building(316,56,10,'#aebcb7',66,true);
+    building(386,64,25,'#91a5a7',66);
+    building(464,54,17,'#c4bca3',66);
+    building(530,52,30,'#8fa3a7',66);
+    add('<rect y="64" width="600" height="26" fill="#71786f"/>');
+    add('<rect y="64" width="600" height="4" fill="#d7d0b8"/>');
+    add('<path d="M0 80H600" stroke="#f5e8b5" stroke-width="2" stroke-dasharray="20 14"/>');
+    add('<path d="M0 88H600" stroke="#59635e" stroke-width="2"/>');
   }
-  if(['open','school','campus','riverHills'].includes(theme.kind)){
-    for(let x=35;x<600;x+=105)parts.push('<rect x="'+x+'" y="51" width="5" height="17" fill="#7c705d"/><rect x="'+(x-8)+'" y="42" width="21" height="12" fill="#63936f"/><rect x="'+(x-4)+'" y="35" width="13" height="9" fill="#76a17a"/>');
+
+  if(kind==='shops'){
+    building(20,75,30,'#c7aa89');
+    building(111,82,25,'#aeb9a5');
+    building(209,72,33,'#d0bea0');
+    building(297,82,21,'#b2b7a4');
+    building(395,72,29,'#c3a785');
+    building(481,95,24,'#aab8ae');
+    for(let x=20;x<580;x+=95){
+      add('<rect x="'+x+'" y="54" width="76" height="8" fill="'+(x%2?'#d1836c':'#e0bb70')+'"/>');
+      add('<rect x="'+(x+7)+'" y="44" width="4" height="10" fill="#fff0ce"/>');
+    }
+    add('<path d="M0 62H600" stroke="#9c896e" stroke-width="3"/>');
   }
-  if(theme.kind==='base')parts.push('<rect y="73" width="600" height="17" fill="#8e927f"/><path d="M0 76H600M0 86H600M90 72L130 90M270 72L310 90M450 72L490 90" stroke="#555e57" stroke-width="3"/><path d="M40 72L95 62M140 72L195 62M260 72L315 62M380 72L435 62" stroke="#72796c" stroke-width="2"/>');
+
+  if(kind==='school'||kind==='campus'){
+    const x=kind==='school'?195:155, w=kind==='school'?220:290, top=kind==='school'?31:25;
+    add('<rect x="'+(x-7)+'" y="'+(top+7)+'" width="'+(w+14)+'" height="'+(62-top-7)+'" fill="#dfd5b8" stroke="#71877d" stroke-width="2"/>');
+    add('<path d="M'+(x-18)+' '+(top+8)+'L'+(x+w/2)+' '+top+'L'+(x+w+18)+' '+(top+8)+'Z" fill="#a56859"/>');
+    const bodyTop=top+7;
+    for(let bx=x+12;bx<x+w-6;bx+=26){
+      for(let row=0;row<2;row++){
+        const wy=bodyTop+5+row*10;
+        if(wy+6<62)add('<rect x="'+bx+'" y="'+wy+'" width="13" height="6" fill="#9bc6ca"/>');
+      }
+    }
+    add('<rect x="'+(x+w/2-10)+'" y="52" width="20" height="10" fill="#89785d"/>');
+    for(let tx=55;tx<600;tx+=125)tree(tx,62,.9);
+  }
+
+  if(kind==='open'){
+    for(let i=0;i<6;i++){
+      const x=24+i*94, h=18+(i%3)*5, w=54;
+      add('<rect x="'+x+'" y="'+(62-h)+'" width="'+w+'" height="'+h+'" fill="'+(i%2?'#d7c69e':'#c8b78e')+'" stroke="#7d8872"/>');
+      add('<path d="M'+(x-4)+' '+(62-h)+'L'+(x+w/2)+' '+(56-h)+'L'+(x+w+4)+' '+(62-h)+'Z" fill="#a8735e"/>');
+      add('<rect x="'+(x+10)+'" y="'+(62-h+7)+'" width="10" height="8" fill="#a5cbd0"/>');
+      add('<rect x="'+(x+34)+'" y="'+(62-h+7)+'" width="10" height="8" fill="#a5cbd0"/>');
+    }
+    for(let tx=75;tx<600;tx+=145)tree(tx,62,1);
+  }
+
+  if(kind==='race'){
+    add('<rect y="62" width="600" height="28" fill="#8fbd72"/>');
+    add('<rect x="100" y="31" width="400" height="31" fill="#d8d8c9" stroke="#677d76" stroke-width="2"/>');
+    add('<path d="M72 33L105 15H495L528 33Z" fill="#f4f0dc" stroke="#71827a" stroke-width="2"/>');
+    add('<path d="M87 35H513" stroke="#fffdf0" stroke-width="4"/>');
+    for(let x=118;x<490;x+=27){
+      add('<rect x="'+x+'" y="39" width="16" height="14" fill="#9fc6c7" stroke="#73857c"/>');
+      add('<rect x="'+(x+4)+'" y="42" width="8" height="7" fill="#e7f0dc"/>');
+    }
+    add('<rect x="92" y="57" width="416" height="5" fill="#82948a"/>');
+    add('<path d="M0 70H600M0 78H600" stroke="#fff9e8" stroke-width="2"/>');
+    for(let x=12;x<600;x+=35)add('<rect x="'+x+'" y="67" width="3" height="14" fill="#fff9e8"/>');
+  }
+
+  if(kind==='housing'||kind==='housingHills'){
+    const base=63;
+    for(let i=0;i<8;i++){
+      const x=16+i*73,w=54+(i%2)*7,h=28+(i*5)%14,top=base-h;
+      building(x,w,top,i%3===0?'#e6e4d7':i%3===1?'#d5ddd1':'#c9d2c7',base,true);
+      add('<rect x="'+(x-2)+'" y="'+base+'" width="'+(w+4)+'" height="3" fill="#71866b" opacity=".7"/>');
+      add('<rect x="'+(x-5)+'" y="'+(base+3)+'" width="'+(w+10)+'" height="5" fill="#7fa16e"/>');
+    }
+  }
+
+  if(kind==='riverHills'){
+    add('<rect y="58" width="600" height="10" fill="#9fbd7a"/>');
+    add('<rect y="68" width="600" height="14" fill="#70b9c7"/>');
+    add('<path d="M0 73H600M0 79H600" stroke="#a9dfe0" stroke-width="2" stroke-dasharray="16 9"/>');
+    for(let i=0;i<5;i++){
+      const x=24+i*112,w=54,h=18+(i%2)*5;
+      building(x,w,68-h,i%2?'#c8bea0':'#c0cbb2',68);
+    }
+    for(let x=80;x<600;x+=145)tree(x,68,.8);
+    add('<path d="M0 64H600" stroke="#8b897a" stroke-width="5"/>');
+    add('<path d="M0 68Q150 45 300 68T600 68" fill="none" stroke="#8b897a" stroke-width="4"/>');
+    for(let x=60;x<600;x+=150)add('<rect x="'+x+'" y="62" width="9" height="19" fill="#8b897a"/>');
+  }
+
+  if(kind==='base'){
+    add('<rect y="62" width="600" height="28" fill="#a8c77e"/>');
+    add('<rect x="115" y="27" width="370" height="39" fill="#c8c9b8" stroke="#667a72" stroke-width="2"/>');
+    add('<path d="M102 28L135 13H465L498 28Z" fill="#dddcc9" stroke="#667a72" stroke-width="2"/>');
+    add('<rect x="130" y="42" width="72" height="24" fill="#77877c" stroke="#5c7069"/>');
+    add('<rect x="215" y="42" width="72" height="24" fill="#77877c" stroke="#5c7069"/>');
+    add('<rect x="300" y="42" width="72" height="24" fill="#77877c" stroke="#5c7069"/>');
+    add('<rect x="385" y="42" width="72" height="24" fill="#77877c" stroke="#5c7069"/>');
+    for(let y=47;y<62;y+=5)for(let x=135;x<457;x+=85)add('<path d="M'+x+' '+y+'H'+(x+62)+'" stroke="#bdc9bf" stroke-width="1"/>');
+    add('<rect y="68" width="600" height="22" fill="#858b7b"/>');
+    for(let x=0;x<600;x+=24)add('<rect x="'+x+'" y="68" width="5" height="22" fill="#665f50"/>');
+    add('<path d="M0 73H600M0 81H600M0 89H600" stroke="#4e5c56" stroke-width="3"/>');
+    add('<path d="M0 71H600M0 79H600M0 87H600" stroke="#c7b892" stroke-width="2"/>');
+  }
+
   parts.push('</svg>');
   return parts.join('');
 }
+
 function drawStationView(){
   const fromIndex=stage===0?0:Math.min(11,stage-1);
   const track=document.getElementById('landscapeTrack');
