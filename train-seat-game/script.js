@@ -188,7 +188,7 @@ function landscapeSvg(index){
     for(let row=0;row<Math.floor(h/10);row++)for(let col=0;col<3;col++)parts.push('<rect x="'+(x+7+col*12)+'" y="'+(y+6+row*9)+'" width="5" height="4" fill="#eaf1d7"/>');
     if(['shops','downtown','river'].includes(theme.kind))parts.push('<rect x="'+x+'" y="66" width="'+w+'" height="5" fill="'+(i%2?'#cf856e':'#e5bb70')+'"/>');
   }
-  if(theme.kind==='downtown')parts.push('<path d="M0 65H600" stroke="#7a7163" stroke-width="4"/><path d="M24 48H180M185 48H280" stroke="#d86654" stroke-width="3"/>');
+  if(theme.kind==='downtown')parts.push('<path d="M0 65H600" stroke="#7a7163" stroke-width="4"/>');
   if(['school','campus'].includes(theme.kind)){
     const x=theme.kind==='school'?250:235;
     parts.push('<rect x="'+x+'" y="33" width="124" height="34" fill="#e2d7ba" stroke="#71877c" stroke-width="2"/><path d="M'+(x-8)+' 34L'+(x+62)+' 18L'+(x+132)+' 34Z" fill="#a96859"/>');
@@ -210,7 +210,7 @@ function drawStationView(){
   const routeIndex=stage===0?0:Math.min(11,stage-1);
   const track=document.getElementById('landscapeTrack');
   track.classList.remove('moving');
-  track.innerHTML=landscapeSvg(routeIndex)+landscapeSvg(routeIndex);
+  track.innerHTML=landscapeSvg(fromIndex)+landscapeSvg(toIndex);
   document.getElementById('outsideStation').textContent=stages[stage][0];
   document.getElementById('platformScene').hidden=false;
   document.getElementById('routeStatus').hidden=true;
@@ -357,7 +357,8 @@ document.getElementById('next').onclick=score;
 document.getElementById('reset').onclick=()=>{assigned={};selected=null;render()};
 function startJourney(){
   if(isTraveling||stage>=stages.length-1)return;
-  const routeIndex=stage;
+  const fromIndex=stage===0?0:Math.min(11,stage-1);
+  const toIndex=Math.max(0,Math.min(11,stage));
   const from=stages[stage][0].replace(/駅$/,'');
   const to=stages[stage+1][0].replace(/駅$/,'');
   isTraveling=true;
