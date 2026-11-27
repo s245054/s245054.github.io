@@ -208,3 +208,8 @@ body.is-traveling .route-status{animation:route-status-pulse .75s ease-in-out in
   .outside{left:0;right:0;width:100%;margin-left:0;margin-right:0}
   .landscape-window{left:0;right:0;width:auto}
 }
+
+/* SVG風景・風景窓・車内背景の色を同じ変数から参照 */
+:root{--scene-sky:#bce6ef;--scene-ground:#c5d99d}
+.scene{background:linear-gradient(var(--scene-sky) 0 25%,var(--scene-ground) 25% 34%,#f1e9d4 34%)}
+.outside,.landscape-window{background:var(--scene-sky)}
