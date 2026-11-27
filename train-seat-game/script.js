@@ -207,10 +207,10 @@ function landscapeSvg(index){
   return parts.join('');
 }
 function drawStationView(){
-  const routeIndex=stage===0?0:Math.min(11,stage-1);
+  const fromIndex=stage===0?0:Math.min(11,stage-1);
   const track=document.getElementById('landscapeTrack');
   track.classList.remove('moving');
-  track.innerHTML=landscapeSvg(fromIndex)+landscapeSvg(toIndex);
+  track.innerHTML=landscapeSvg(fromIndex)+landscapeSvg(fromIndex);
   document.getElementById('outsideStation').textContent=stages[stage][0];
   document.getElementById('platformScene').hidden=false;
   document.getElementById('routeStatus').hidden=true;
@@ -373,7 +373,7 @@ function startJourney(){
   document.getElementById('routeStatus').hidden=false;
   document.getElementById('platformScene').hidden=true;
   const track=document.getElementById('landscapeTrack');
-  track.innerHTML=landscapeSvg(routeIndex)+landscapeSvg(routeIndex);
+  track.innerHTML=landscapeSvg(fromIndex)+landscapeSvg(toIndex);
   track.classList.remove('moving');
   void track.offsetWidth;
   track.classList.add('moving');
